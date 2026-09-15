@@ -1,0 +1,59 @@
+name: Release Skill
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate version
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME#v}"
+          SKILL_VERSION="$(awk '/^[[:space:]]*version:[[:space:]]*/ {gsub(/["[:space:]]/, "", $2); print $2; exit}' mql5-engineering/SKILL.md)"
+          FILE_VERSION="$(tr -d '[:space:]' < VERSION)"
+          BANNER_VERSION="$(awk -F'"' '/^VERSION=/ {print $2; exit}' mql5-engineering/scripts/banner.sh)"
+          echo "Tag: $TAG"
+          echo "Skill: $SKILL_VERSION"
+          echo "File: $FILE_VERSION"
+          echo "Banner: $BANNER_VERSION"
+          test "$TAG" = "$SKILL_VERSION"
+          test "$TAG" = "$FILE_VERSION"
+          test "$TAG" = "$BANNER_VERSION"
+
+      - name: Validate shell scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n install.sh
+          bash -n uninstall.sh
+          find mql5-engineering/scripts -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
+
+      - name: Build release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          ZIP="mql5-engineering-${TAG}.zip"
+          zip -qr "$ZIP" mql5-engineering
+          sha256sum "$ZIP" > "$ZIP.sha256"
+          echo "ZIP=$ZIP" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$ZIP" "$ZIP.sha256" \
+            --title "MQL5 Engineering $GITHUB_REF_NAME" \
+            --generate-notes

@@ -1,0 +1,5 @@
+.DS_Store
+*.zip
+*.tar.gz
+*.sha256
+.tmp/
