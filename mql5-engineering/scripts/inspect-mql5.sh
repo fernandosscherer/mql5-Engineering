@@ -47,7 +47,7 @@ grep -RInE --include='*.mq5' --include='*.mqh' \
   "$ROOT" 2>/dev/null || true
 
 printf '\n== Licensing / network hotspots ==\n'
-grep -RInoE --include='*.mq5' --include='*.mqh' \
+grep -RInE --include='*.mq5' --include='*.mqh' \
   '\b(WebRequest|Socket|ACCOUNT_LOGIN|license|License|licence|Licence|activation|Activation|token|Token|api|API)\b' \
   "$ROOT" 2>/dev/null || true
 
