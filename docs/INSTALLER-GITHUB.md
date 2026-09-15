@@ -39,7 +39,7 @@ Dentro da pasta `mql5-Engineering`:
 ```bash
 git init
 git add .
-git commit -m "Release mql5-engineering v2.5"
+git commit -m "Release mql5-engineering v2.6"
 git branch -M main
 git remote add origin https://github.com/fernandosscherer/mql5-Engineering.git
 git push -u origin main
@@ -58,7 +58,7 @@ Depois de copiar os arquivos atualizados:
 
 ```bash
 git add .
-git commit -m "Update mql5-engineering to v2.5"
+git commit -m "Update mql5-engineering to v2.6"
 git push origin main
 ```
 
@@ -97,45 +97,45 @@ curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/m
   bash -s -- uninstall --target universal --yes
 ```
 
-## 8. Criar a release v2.5
+## 8. Criar a release v2.6
 
 Confirme que `mql5-engineering/SKILL.md` contém:
 
 ```yaml
 metadata:
-  version: "2.5"
+  version: "2.6"
 ```
 
 Crie e envie a tag:
 
 ```bash
-git tag v2.5
-git push origin v2.5
+git tag v2.6
+git push origin v2.6
 ```
 
 O workflow `.github/workflows/release.yml` valida a tag e publica automaticamente:
 
-- `mql5-engineering-v2.5.zip`;
-- `mql5-engineering-v2.5.zip.sha256`.
+- `mql5-engineering-v2.6.zip`;
+- `mql5-engineering-v2.6.zip.sha256`.
 
 ## 9. Nova versão
 
-Para uma futura `2.6`:
+Para uma futura `2.7`:
 
 1. atualizar a versão no `SKILL.md`;
 2. atualizar `scripts/banner.sh`;
 3. atualizar `VERSION` e `CHANGELOG.md`;
 4. testar os scripts;
 5. fazer commit e push;
-6. criar a tag `v2.6`;
+6. criar a tag `v2.7`;
 7. enviar a tag ao GitHub.
 
 ```bash
 git add .
-git commit -m "Release mql5-engineering v2.6"
+git commit -m "Release mql5-engineering v2.7"
 git push origin main
-git tag v2.6
-git push origin v2.6
+git tag v2.7
+git push origin v2.7
 ```
 
 ## 10. Repositório público x privado

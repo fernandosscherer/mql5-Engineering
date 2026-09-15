@@ -6,7 +6,7 @@ compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
   audience: mql5-developers
   workflow: engineering
-  version: "2.5"
+  version: "2.6"
   author: "Fernando Scherer"
   repository: "https://github.com/fernandosscherer/mql5-Engineering.git"
 ---
@@ -15,15 +15,17 @@ metadata:
 
 ## Activation experience
 
-When this skill is explicitly activated for a new interactive task, show the branded activation experience exactly once before the startup questionnaire.
+When this skill is explicitly activated for a new interactive task, use a **silent activation protocol**. The activation phase must be visually clean and must not expose internal reference loading, file contents, file paths, discovery narration, or tool-by-tool commentary in assistant text.
 
 Preferred behavior in an interactive terminal:
 
 1. Run `scripts/banner.sh` once.
-2. Display the large MQL5 ASCII identity banner first.
-3. Run the short terminal initialization animation.
-4. Display the compact credits/status banner.
-5. Immediately present the mandatory start questionnaire below.
+2. Show only the branded MQL5 ASCII activation banner and credits.
+3. Show the ANSI loading animation with the user-facing message `Carregando...`.
+4. When the activation presentation finishes, show exactly `Pronto para uso!`.
+5. Then present the mandatory start questionnaire.
+
+Do **not** print boot-component lists such as project discovery, MQL5 reference, safeguards, documentation protocol, quality gates, filenames, or the contents of files opened by the skill during activation.
 
 If shell execution is unavailable, the environment is non-interactive, or running the script would be inappropriate, render this static fallback instead:
 
@@ -43,39 +45,14 @@ If shell execution is unavailable, the environment is non-interactive, or runnin
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
-                     MQL5 Engineering v2.5
-
+                     MQL5 Engineering v2.6
           Plan → Approve → Execute → Validate → Auditar
 
-[MQL5] BOOTING ENGINEERING SYSTEM...
+Author : Fernando Scherer
+GitHub : https://github.com/fernandosscherer/mql5-Engineering.git
 
-[▓▓▓▓▓▓▓▓▓▓] PROJECT DISCOVERY              [OK]
-[▓▓▓▓▓▓▓▓▓▓] MQL5 REFERENCE                 [OK]
-[▓▓▓▓▓▓▓▓▓▓] TRADING SAFEGUARDS             [OK]
-[▓▓▓▓▓▓▓▓▓▓] DOCUMENTATION PROTOCOL         [OK]
-[▓▓▓▓▓▓▓▓▓▓] QUALITY GATES                  [OK]
-
-SYSTEM ONLINE
-
-┌────────────────────────────────────────────────────────────────────┐
-│  MQL5 ENGINEERING SYSTEM v2.5                                     │
-│                                                                    │
-│  [01] BUILD      Create Expert Advisors / Indicators               │
-│  [02] IMPROVE    Improve existing projects                         │
-│  [03] DEBUG      Diagnose and correct defects                      │
-│  [04] AUDIT      Production and safety audit                       │
-│                                                                    │
-│  SYSTEM STATUS : READY                                             │
-│  SAFETY MODE   : PLAN BEFORE EXECUTION                             │
-│                                                                    │
-│  Plan → Approve → Execute → Validate → Auditar                     │
-├────────────────────────────────────────────────────────────────────┤
-│  Author : Fernando Scherer                                         │
-│  GitHub : https://github.com/fernandosscherer/mql5-Engineering.git │
-└────────────────────────────────────────────────────────────────────┘
-
-READY FOR ENGINEERING.
-Plan → Approve → Execute → Validate → Auditar
+Carregando...
+Pronto para uso!
 ```
 
 Rules:
@@ -84,8 +61,12 @@ Rules:
 - The animation is presentation-only and must not change project files or state.
 - If `NO_COLOR` is set, honor it.
 - If `MQL5_ENGINEERING_NO_ANIMATION=1` is set, use static output.
-- Do not claim the animation loaded or verified technical sources; it only indicates workflow initialization.
+- `Carregando...` means the engineering workflow is being initialized; do not claim that every technical source has already been read or verified.
+- Never echo the contents of `SKILL.md`, `references/`, `workflows/`, or other internal files merely because they were loaded.
+- Do not narrate routine internal reads with phrases such as `opening...`, `reading...`, `loading reference...`, or lists of files.
+- During normal work, surface file names and evidence only when they are materially relevant to the plan, a finding, a change, or the final report.
 - Use a monochrome retro terminal palette when ANSI color is available: green only on the terminal background. Use bright, normal, and dim green for hierarchy; do not use cyan, magenta, yellow, or red.
+- Host applications may still render their own tool-call/activity UI. This skill controls its own assistant-facing output, not the host application's internal tool visualization.
 
 Use this skill as a controlled engineering workflow for MQL5 products. It supports four operating modes:
 

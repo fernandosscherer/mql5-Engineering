@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.6 — 2026-09-15
+
+- Added silent activation protocol for a cleaner OpenCode panel experience.
+- Removed verbose boot-component lists from the activation output.
+- Activation now shows only the retro green ASCII banner/credits, animated `Carregando...`, and `Pronto para uso!` before the planning questionnaire.
+- Added instructions not to echo internal skill/reference file contents or narrate routine reads.
+- Preserved ANSI green-only retro terminal styling and static/NO_COLOR fallbacks.
+- Clarified that host applications may still render their own tool/activity UI independently of the skill.
+- Updated skill version to 2.6.
+
 ## 2.5 — 2026-09-15
 
 - Added GitHub-ready one-line terminal installer.

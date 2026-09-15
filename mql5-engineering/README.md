@@ -1,4 +1,4 @@
-# mql5-engineering v2.5 — OpenCode Skill
+# mql5-engineering v2.6 — OpenCode Skill
 
 Reusable engineering skill for MQL5 products. It supports planning, creation, improvement, debugging, auditing, documentation maintenance, licensing design, backend integration planning, risk review, and production readiness.
 
@@ -24,7 +24,17 @@ OpenCode discovers skills from these locations and loads supporting files on dem
 
 ## Activation banner
 
-When explicitly activated in an interactive terminal, the skill runs `scripts/banner.sh` once before the planning questionnaire. The script first displays the large MQL5 ASCII identity banner, then runs a short ANSI initialization animation, and finally shows the compact branded credits/status banner.
+When explicitly activated in an interactive terminal, the skill runs `scripts/banner.sh` once before the planning questionnaire.
+
+The startup presentation is intentionally minimal:
+
+1. retro green MQL5 ASCII banner;
+2. author and GitHub credits;
+3. animated `Carregando...`;
+4. `Pronto para uso!`;
+5. planning questionnaire.
+
+The activation phase does not echo internal reference contents, file-loading lists, or routine discovery narration in assistant text.
 
 Credits displayed in the banner:
 
@@ -96,7 +106,7 @@ The repository installer also supports:
 ./install.sh update
 
 # Install a tag/branch/commit
-./install.sh install --ref v2.5
+./install.sh install --ref v2.6
 
 # Uninstall
 ./install.sh uninstall --target universal --yes
