@@ -1,4 +1,4 @@
-# mql5-engineering v2.6 — OpenCode Skill
+# mql5-engineering v2.7 — OpenCode Skill
 
 Reusable engineering skill for MQL5 products. It supports planning, creation, improvement, debugging, auditing, documentation maintenance, licensing design, backend integration planning, risk review, and production readiness.
 
@@ -38,8 +38,8 @@ The activation phase does not echo internal reference contents, file-loading lis
 
 Credits displayed in the banner:
 
-- **Author:** Fernando Scherer
-- **GitHub:** https://github.com/fernandosscherer/mql5-Engineering.git
+- **Created by:** Fernando Scherer
+- **Repository:** https://github.com/fernandosscherer/mql5-Engineering.git
 
 Disable the animation while preserving static output with:
 
@@ -58,7 +58,7 @@ The terminal identity uses a monochrome retro CRT palette: black background with
 Use a skill mql5-engineering.
 ```
 
-The skill starts with a grouped questionnaire. It does not modify source files until it has performed discovery, produced an execution plan, and received explicit approval.
+The skill starts with an Interactive Planning Wizard that asks one question at a time. It waits for each answer, skips questions that are already answered or not applicable, and finishes with an open-ended prompt for the user's objective. It does not modify source files until discovery is complete, an execution plan has been presented, and explicit approval has been received.
 
 ## Main modes
 
@@ -106,7 +106,7 @@ The repository installer also supports:
 ./install.sh update
 
 # Install a tag/branch/commit
-./install.sh install --ref v2.6
+./install.sh install --ref v2.7
 
 # Uninstall
 ./install.sh uninstall --target universal --yes

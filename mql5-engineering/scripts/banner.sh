@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -u
 
-VERSION="2.6"
-AUTHOR="Fernando Scherer"
-GITHUB="https://github.com/fernandosscherer/mql5-Engineering.git"
+VERSION="2.7"
+CREATED_BY="Fernando Scherer"
+REPOSITORY="https://github.com/fernandosscherer/mql5-Engineering.git"
 
 # Animation can be disabled with --static or MQL5_ENGINEERING_NO_ANIMATION=1.
 STATIC=0
@@ -65,8 +65,8 @@ print_banner() {
   done
   printf '\n%s                     MQL5 Engineering v%s%s\n' "$GREEN_BRIGHT" "$VERSION" "$RESET"
   printf '%s          Plan → Approve → Execute → Validate → Auditar%s\n' "$GREEN" "$RESET"
-  printf '\n%sAuthor : %s%s\n' "$GREEN_DIM" "$AUTHOR" "$RESET"
-  printf '%sGitHub : %s%s\n\n' "$GREEN_DIM" "$GITHUB" "$RESET"
+  printf '\n%sCreated by : %s%s\n' "$GREEN_DIM" "$CREATED_BY" "$RESET"
+  printf '%sRepository : %s%s\n\n' "$GREEN_DIM" "$REPOSITORY" "$RESET"
 }
 
 loading_animation() {

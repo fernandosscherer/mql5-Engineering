@@ -6,7 +6,7 @@ compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
   audience: mql5-developers
   workflow: engineering
-  version: "2.6"
+  version: "2.7"
   author: "Fernando Scherer"
   repository: "https://github.com/fernandosscherer/mql5-Engineering.git"
 ---
@@ -45,11 +45,11 @@ If shell execution is unavailable, the environment is non-interactive, or runnin
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
-                     MQL5 Engineering v2.6
+                     MQL5 Engineering v2.7
           Plan → Approve → Execute → Validate → Auditar
 
-Author : Fernando Scherer
-GitHub : https://github.com/fernandosscherer/mql5-Engineering.git
+Created by : Fernando Scherer
+Repository : https://github.com/fernandosscherer/mql5-Engineering.git
 
 Carregando...
 Pronto para uso!
@@ -75,65 +75,109 @@ Use this skill as a controlled engineering workflow for MQL5 products. It suppor
 - **DEBUG** — investigate a defect, establish root cause, implement the smallest safe correction, and check regressions.
 - **AUDIT** — perform a read-only production audit and report findings without changing source code unless a later remediation plan is explicitly approved.
 
-## Mandatory start questionnaire
+## Interactive Planning Wizard
 
-At the beginning of every new task in which this skill is activated, do not edit files immediately. First present one grouped questionnaire. Pre-fill answers that are already explicit in the user's message, but still show the group so the user can confirm or complete it.
+At the beginning of every new task in which this skill is activated, do not edit files immediately. After the activation banner and `Pronto para uso!`, start an **Interactive Planning Wizard**.
 
-Use this structure:
+### Wizard interaction rules
+
+- Ask **exactly one user-facing planning question per assistant turn**.
+- Wait for the user's answer before asking the next question.
+- Do not display the full questionnaire in advance.
+- Do not ask the user to repeat information already clearly supplied in the current request or reliably discovered from the repository.
+- Skip questions that are not applicable.
+- If an answer creates a material decision branch, ask the necessary follow-up question before moving on.
+- Keep routine internal reads silent. Do not expose skill/reference contents or narrate file loading.
+- The final wizard question must always be an open-ended prompt allowing the user to explain the objective in their own words.
+- After all required answers are collected, show a concise requirements summary before discovery/planning continues.
+
+### Canonical wizard sequence
+
+Use the following sequence as a decision tree, not as a batch form.
+
+**STEP 1 — Objective**
 
 ```text
-MQL5 ENGINEERING — INÍCIO
+┌─ STEP 1 ─────────────────────────────────────────────
+│ O que você deseja fazer?
+│
+│ 1. Criar Expert Advisor
+│ 2. Criar indicador
+│ 3. Melhorar projeto existente
+│ 4. Corrigir bug
+│ 5. Auditar produto
+│ 6. Outro
+└──────────────────────────────────────────────────────
 
-Antes de executar qualquer tarefa, responda ou confirme:
-
-1. O que deseja fazer?
-   [1] Criar novo Expert Advisor
-   [2] Criar novo indicador
-   [3] Melhorar projeto existente
-   [4] Corrigir bug
-   [5] Auditar produto
-   [6] Outro
-
-2. Qual é o escopo?
-   [1] Projeto inteiro
-   [2] EA principal
-   [3] Indicador
-   [4] Execução / ordens
-   [5] Gestão financeira / risco
-   [6] Painel / UI
-   [7] Licenciamento / backend
-   [8] Outro
-
-3. Este produto utiliza ou utilizará licenciamento?
-   [1] Sim
-   [2] Não
-   [3] Já existe
-   [4] Ainda não definido
-
-4. Se houver licenciamento, qual é a situação?
-   [1] Criar backend e API
-   [2] Integrar backend existente
-   [3] Recomendar arquitetura
-   [4] Não se aplica
-
-5. Deseja criar uma documentação específica para esta tarefa/projeto?
-   [1] Sim
-   [2] Não — apenas atualizar a documentação existente
-   [3] Decidir durante o planejamento
-
-6. Há documentação que deve ser tratada como fonte de verdade?
-   Ex.: docs/master.md, docs/spec*.md, README.md
-   Responda "detectar automaticamente" se preferir.
-
-7. Há algo que NÃO deve ser alterado?
-
-8. Qual é o critério de sucesso desta tarefa?
-
-9. Explique com suas palavras o que você deseja fazer:
-   >
+>
 ```
 
-Do not ask the user to repeat information already clearly supplied. The open-ended item 9 is always present.
+**STEP 2 — Scope**
+
+Ask which component or scope is involved. Offer only the options relevant to the selected objective, such as project inteiro, EA principal, indicador, execução/ordens, gestão financeira/risco, painel/UI, licenciamento/backend, or outro.
+
+**STEP 3 — Licensing**
+
+Ask whether the product uses or will use licensing only when licensing is relevant to the product/task or not already determined.
+
+Options may include:
+
+- Sim
+- Não
+- Já existe
+- Ainda não definido
+
+**STEP 4 — Licensing backend**
+
+Only if licensing applies, ask whether to:
+
+- criar backend e API;
+- integrar backend existente;
+- recomendar arquitetura;
+- não se aplica.
+
+**STEP 5 — Documentation**
+
+Ask whether to create dedicated documentation for the task/project:
+
+- Sim;
+- Não — apenas atualizar a documentação existente;
+- Decidir durante o planejamento.
+
+Relevant existing documentation must still be updated by default after approved project changes.
+
+**STEP 6 — Source of truth**
+
+Ask which documentation should be treated as authoritative only when it cannot be determined from the repository. Allow `detectar automaticamente`.
+
+**STEP 7 — Exclusions**
+
+Ask what must not be changed, unless already explicit.
+
+**STEP 8 — Success criteria**
+
+Ask how the user will consider the task successful, unless already explicit.
+
+**FINAL STEP — Open objective**
+
+Always finish the wizard with:
+
+```text
+Explique com suas palavras o que você deseja fazer:
+
+>
+```
+
+This final answer may clarify, override, or add nuance to earlier multiple-choice answers. Resolve contradictions before planning.
+
+### After the wizard
+
+1. Present a concise **Requirements Summary** with the understood objective, scope, constraints, documentation preference, licensing context, and success criteria.
+2. Perform repository discovery.
+3. Ask any newly required material follow-up questions one at a time.
+4. Prepare the execution plan.
+5. Request explicit approval.
+6. Do not modify project files before approval.
 
 ## Mandatory lifecycle
 

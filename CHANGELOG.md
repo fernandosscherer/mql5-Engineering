@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.7 — 2026-09-15
+
+- Replaced the grouped startup questionnaire with an Interactive Planning Wizard.
+- The wizard now asks one question at a time and waits for the user's answer before continuing.
+- Added dynamic question skipping when information is already known or not applicable.
+- Preserved the final open-ended prompt so the user can describe the objective in their own words.
+- After the wizard, the skill summarizes the requirements, performs discovery, presents the plan, and waits for approval before execution.
+- Kept activation output silent: banner, `Carregando...`, `Pronto para uso!`, then the first wizard question only.
+- Renamed activation credit labels to `Created by` and `Repository`.
+- Updated version to 2.7.
+
 ## 2.6 — 2026-09-15
 
 - Added silent activation protocol for a cleaner OpenCode panel experience.

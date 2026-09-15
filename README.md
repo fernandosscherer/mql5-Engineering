@@ -4,8 +4,8 @@
 
 Production-oriented engineering skill for MQL5 Expert Advisors, indicators, libraries, panels, licensing, backend integration, testing, risk review, and documentation maintenance.
 
-**Author:** Fernando Scherer
-**GitHub:** https://github.com/fernandosscherer/mql5-Engineering
+**Created by:** Fernando Scherer
+**Repository:** https://github.com/fernandosscherer/mql5-Engineering
 
 ## Quick install
 
@@ -75,7 +75,7 @@ Existing installations are backed up before replacement by default.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | \
-  bash -s -- install --ref v2.6
+  bash -s -- install --ref v2.7
 ```
 
 You can also use a branch or commit SHA with `--ref`.
@@ -104,11 +104,11 @@ The installer requires `curl` and `tar` and does not require `sudo`. It writes t
 
 ## Releases
 
-Push a matching Git tag such as `v2.6` to trigger `.github/workflows/release.yml`. The workflow:
+Push a matching Git tag such as `v2.7` to trigger `.github/workflows/release.yml`. The workflow:
 
 1. verifies that the tag matches `VERSION`, `mql5-engineering/SKILL.md`, and the activation banner;
 2. validates shell syntax;
-3. creates `mql5-engineering-v2.6.zip`;
+3. creates `mql5-engineering-v2.7.zip`;
 4. generates a SHA-256 checksum;
 5. publishes both files as a GitHub Release.
 
@@ -136,12 +136,14 @@ mql5-Engineering/
 
 ## Silent activation experience
 
-When activated, the skill keeps the startup UI intentionally minimal. It shows the retro green ASCII banner, an ANSI `Carregando...` animation, and then `Pronto para uso!`. It does not echo internal reference contents, file-loading lists, or routine discovery narration in assistant text. After the activation splash, the grouped planning questionnaire is presented.
+When activated, the skill keeps the startup UI intentionally minimal. It shows the retro green ASCII banner, an ANSI `Carregando...` animation, and then `Pronto para uso!`. It does not echo internal reference contents, file-loading lists, or routine discovery narration in assistant text. After the activation splash, the Interactive Planning Wizard starts and asks one question at a time.
 
 ## Workflow
 
 ```text
-Questionnaire
+Interactive Planning Wizard
+   ↓
+Requirements summary
    ↓
 Discovery
    ↓
