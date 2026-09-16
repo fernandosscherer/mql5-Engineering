@@ -1,8 +1,14 @@
 # mql5-engineering v3.0 — Agent Skill
 
-Reusable engineering system for MQL5 products.
+Reusable engineering system for production-oriented MQL5 work.
 
-v3.0 routes work into **BUILD, IMPROVE, DEBUG, REVIEW, or AUDIT**, discovers facts before asking questions, coordinates specialized engineering/audit passes, and keeps project documentation synchronized.
+**Modes:** BUILD • IMPROVE • DEBUG • REVIEW • AUDIT
+
+## Core principle
+
+> **Facts are the agent's job. Decisions are the user's job.**
+
+v3.0 performs repository discovery before asking questions whenever possible. It routes the request into the narrowest workflow and loads only the applicable engineering/audit modules.
 
 ## Installation
 
@@ -10,46 +16,70 @@ v3.0 routes work into **BUILD, IMPROVE, DEBUG, REVIEW, or AUDIT**, discovers fac
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash
 ```
 
-Default location:
+Default:
 
 ```text
 ~/.agents/skills/mql5-engineering
 ```
 
+OpenCode:
+
+```bash
+./install.sh --target opencode
+```
+
+Claude:
+
+```bash
+./install.sh --target claude
+```
+
+Project-local:
+
+```bash
+./install.sh --target project
+```
+
 ## Activation
 
-The skill runs the retro green terminal banner, then:
-
 ```text
+MQL5 ENGINEERING v3.0
+[ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]
+
+Discover → Route → Engineer → Validate → Audit
+Facts → Agent | Decisions → User
+
 Carregando...
 Pronto para uso!
 ```
 
 Activation does not echo internal references, file-loading lists, or discovery narration.
 
-## Core rule
+## Audit
 
-> **Facts are the agent's job. Decisions are the user's job.**
+A full audit automatically determines which technical domains apply.
 
-When the request already establishes the objective, v3.0 does not force a generic questionnaire. It performs repository discovery first and asks only material decisions that cannot be inferred safely.
+Core EA passes:
 
-## Modes
+- code;
+- spec compliance;
+- trading logic;
+- trade execution;
+- state/ownership;
+- financial risk;
+- architecture.
 
-- **BUILD**
-- **IMPROVE**
-- **DEBUG**
-- **REVIEW**
-- **AUDIT**
+Optional passes:
 
-## Audit model
+- indicators;
+- Strategy Tester;
+- performance;
+- UI;
+- licensing/backend/security;
+- documentation;
+- regulatory flags.
 
-A full audit determines applicability automatically.
-
-Core EA passes include code, spec compliance, trading logic, trade execution, state/ownership, financial risk, and architecture.
-
-Additional passes load only when relevant: indicators, tester, performance, UI, licensing, documentation, and regulatory.
-
-A clean result with an uninspected critical path is **LIMITED COVERAGE**, not READY.
+If critical-path coverage is incomplete, the result is `LIMITED COVERAGE`, not `READY`.
 
 ## Documentation
 

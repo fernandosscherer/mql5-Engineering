@@ -15,6 +15,8 @@
 - Added engineering references for deep-module design, domain modeling, testing, debugging, and evidence quality.
 - Removed numeric /10 quality scores.
 - Added complete v3.0 architecture documentation.
+- Refined public README, installer UX, and terminal activation identity for v3.0.
+- Added installer `--version`, cleaner silent downloads, detected package-version display, and a final `SYSTEM READY` summary.
 
 ## 2.8 — 2026-09-15
 
