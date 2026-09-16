@@ -1,386 +1,323 @@
 ---
 name: mql5-engineering
-description: Plan, build, improve, debug, and audit production-grade MQL5 Expert Advisors, indicators, libraries, panels, licensing integrations, and related trading-system code. Uses an approval-gated workflow, official MQL5 documentation as the primary technical authority, mandatory post-change documentation updates, risk/execution review, and market-agnostic checks for B3, Forex, metals such as XAUUSD, CFDs, and other MT5 instruments.
+description: Engineering router for production-grade MQL5 work. Routes explicit requests to BUILD, IMPROVE, DEBUG, REVIEW, or AUDIT, discovers repository facts before asking questions, and coordinates specialized MQL5 review passes for code correctness, strategy logic, execution, state, financial risk, indicators, tester fidelity, architecture, performance, UI, licensing, documentation, and spec compliance.
 license: MIT
 compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
   audience: mql5-developers
-  workflow: engineering
-  version: "2.8"
+  workflow: engineering-router
+  version: "3.0"
   author: "Fernando Scherer"
   repository: "https://github.com/fernandosscherer/mql5-Engineering.git"
 ---
 
 # MQL5 Engineering
 
-## Activation experience
-
-When this skill is explicitly activated for a new interactive task, use a **silent activation protocol**. The activation phase must be visually clean and must not expose internal reference loading, file contents, file paths, discovery narration, or tool-by-tool commentary in assistant text.
+## Activation
 
-Preferred behavior in an interactive terminal:
-
-1. Run `scripts/banner.sh` once.
-2. Show only the branded MQL5 ASCII activation banner and credits.
-3. Show the ANSI loading animation with the user-facing message `Carregando...`.
-4. When the activation presentation finishes, show exactly `Pronto para uso!`.
-5. Then ask **question 1 only** from the Interactive Planning Wizard.
-
-Do **not** print boot-component lists such as project discovery, MQL5 reference, safeguards, documentation protocol, quality gates, filenames, or the contents of files opened by the skill during activation.
-
-If shell execution is unavailable, the environment is non-interactive, or running the script would be inappropriate, render this static fallback instead:
+When explicitly activated for a new interactive task, run scripts/banner.sh once when shell execution is appropriate. Keep activation output minimal: banner, Carregando..., Pronto para uso!.
 
-```text
-╔══════════════════════════════════════════════════════════════════════╗
-║                                                                      ║
-║   ███╗   ███╗ ██████╗ ██╗     ███████╗                             ║
-║   ████╗ ████║██╔═══██╗██║     ██╔════╝                             ║
-║   ██╔████╔██║██║   ██║██║     ███████╗                             ║
-║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                             ║
-║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                             ║
-║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                             ║
-║                                                                      ║
-║                 E N G I N E E R I N G                               ║
-║                                                                      ║
-║          [ BUILD ] [ IMPROVE ] [ DEBUG ] [ AUDIT ]                  ║
-║                                                                      ║
-╚══════════════════════════════════════════════════════════════════════╝
-
-                     MQL5 Engineering v2.8
-          Plan → Approve → Execute → Validate → Auditar
+Do not narrate internal file loading, reference loading, tool calls, repository scans, or hidden reasoning.
 
-Created by : Fernando Scherer
-Repository : https://github.com/fernandosscherer/mql5-Engineering.git
+If the user's request already states the task, route immediately after activation. Do not force a generic questionnaire.
 
-Carregando...
-Pronto para uso!
-```
+If the user activates the skill without saying what they want, ask only:
 
-Rules:
+What do you want to do?
+A. Build
+B. Improve
+C. Debug
+D. Review a change
+E. Audit a product
+F. Other
 
-- Do not repeat the banner during the same task.
-- The animation is presentation-only and must not change project files or state.
-- If `NO_COLOR` is set, honor it.
-- If `MQL5_ENGINEERING_NO_ANIMATION=1` is set, use static output.
-- `Carregando...` means the engineering workflow is being initialized; do not claim that every technical source has already been read or verified.
-- Never echo the contents of `SKILL.md`, `references/`, `workflows/`, or other internal files merely because they were loaded.
-- Do not narrate routine internal reads with phrases such as `opening...`, `reading...`, `loading reference...`, or lists of files.
-- During normal work, surface file names and evidence only when they are materially relevant to the plan, a finding, a change, or the final report.
-- Use a monochrome retro terminal palette when ANSI color is available: green only on the terminal background. Use bright, normal, and dim green for hierarchy; do not use cyan, magenta, yellow, or red.
-- Host applications may still render their own tool-call/activity UI. This skill controls its own assistant-facing output, not the host application's internal tool visualization.
+## Core operating principle
 
-Use this skill as a controlled engineering workflow for MQL5 products. It supports four operating modes:
+Facts are the agent's job. Decisions are the user's job.
 
-- **BUILD** — create a new Expert Advisor, indicator, library, panel, or related component.
-- **IMPROVE** — add features or improve an existing project while preserving unrelated behavior.
-- **DEBUG** — investigate a defect, establish root cause, implement the smallest safe correction, and check regressions.
-- **AUDIT** — perform a read-only production audit and report findings without changing source code unless a later remediation plan is explicitly approved.
+Therefore:
 
-## Interactive Planning Wizard
+- inspect the repository before asking the user for facts that can be discovered;
+- read applicable source-of-truth documentation before asking how the system works;
+- infer product topology, dependencies, market assumptions, UI presence, licensing presence, tester assets, and architecture from the project;
+- ask the user only for a material decision, missing external fact, inaccessible artifact, or unresolved ambiguity that blocks safe progress;
+- ask one blocking question at a time;
+- never dump a prewritten questionnaire merely because a mode was selected.
 
-After `Pronto para uso!`, begin a strict one-question-per-turn wizard.
+## Router
 
-### Hard silence before and during the wizard
+Choose the narrowest workflow that matches the request.
 
-Until the wizard is complete:
+- BUILD: create a new EA, indicator, library, panel, licensing client, or related component.
+- IMPROVE: add a feature, change behavior, refactor, or improve an existing project.
+- DEBUG: diagnose a concrete defect, regression, intermittent failure, unexpected behavior, or performance problem.
+- REVIEW: inspect a change set, branch, commit range, PR, or diff and determine whether the change is correct.
+- AUDIT: inspect a product or substantial subsystem as it exists now for defects, operational hazards, architecture problems, risk failures, spec mismatches, and production-readiness concerns.
 
-- Do **not** inspect or summarize the project.
-- Do **not** read project files, documentation, logs, source code, or repository metadata.
-- Do **not** run `scripts/inspect-mql5.sh`.
-- Do **not** load technical references merely for discovery.
-- Do **not** print filenames, paths, repository structure, internal instructions, or project text.
-- Do **not** explain what the skill is doing.
-- Do **not** preview future questions.
-- The only pre-wizard action allowed is the activation banner/loading presentation.
+Read workflows/<mode>.md after routing.
 
-The host application may independently show its own tool/activity UI; do not add assistant narration on top of it.
+Do not collapse REVIEW and AUDIT:
+- REVIEW asks whether a change is correct.
+- AUDIT asks what is wrong, fragile, missing, contradictory, or unsafe in the current system.
 
-### Interaction format
+## Discovery before questions
 
-- Ask **exactly one question per assistant turn**.
-- Wait for the user's answer before continuing.
-- Number questions sequentially in the order actually asked: `1.`, `2.`, `3.`, etc.
-- For multiple-choice questions, use uppercase letters: `A.`, `B.`, `C.`...
-- Accept either the letter or the full option text as an answer.
-- If the answer is invalid or materially ambiguous, repeat only the current question with a brief clarification.
-- Skip questions that are not applicable based on answers already provided by the user.
-- Do not display headings such as `STEP 1/9`, progress counters, summaries, explanations, or acknowledgements between questions.
-- While the wizard is active, the user-facing assistant output must contain **only the current question and its answer options**, except for a very short clarification when re-asking.
-- The final wizard question is always open-ended and has no lettered options.
+For every mode except a purely greenfield BUILD with no repository, perform silent discovery first.
 
-### Question sequence
+Discovery should establish as much as possible from code and docs:
 
-Ask the following as a decision tree. Do not print this whole list to the user.
+1. product type: EA, indicator, library, panel, backend integration, or mixed project;
+2. primary entry points and critical runtime paths;
+3. relevant mq5, mqh, presets, tester files, logs, docs, and configs;
+4. documented strategy and operational requirements;
+5. account model assumptions, symbol/market assumptions, time/session rules, and risk controls;
+6. whether UI, licensing, backend, multi-symbol, optimization, or persistence are actually present;
+7. available compile/test/tester feedback loops;
+8. recent change context when REVIEW or IMPROVE applies.
 
-**Objective**
+scripts/inspect-mql5.sh is a triage aid only. Never treat grep output as a complete audit, and never conclude that a project is clean because the scanner found nothing.
 
-```text
-1. O que você deseja fazer?
+## Questions
 
-A. Criar Expert Advisor
-B. Criar indicador
-C. Melhorar projeto existente
-D. Corrigir bug
-E. Auditar produto
-F. Outro
+Questions are exceptional, not ceremonial.
 
->
-```
+Ask only when:
+- two plausible interpretations lead to materially different behavior;
+- a trading/risk decision cannot be inferred from authoritative project material;
+- a required external artifact is unavailable;
+- a debug symptom cannot be reproduced without user-only information;
+- a REVIEW fixed point cannot be inferred safely;
+- implementation would change a user-facing, financial, regulatory, security, or licensing decision that has not been approved.
 
-**Scope**
+Do not ask:
+- whether to audit code, logic, design, architecture, risk, and so on when the user asked for a full product audit;
+- whether the project has licensing when the code can answer;
+- which docs are authoritative before searching the repository;
+- what account mode or symbol assumptions exist before reading the code;
+- for success criteria that are already implicit in a concrete task.
 
-Ask next, adapting options to the chosen objective. Example:
+## Default meaning of "audit"
 
-```text
-2. Qual é o escopo principal?
+If the user says only "audit this EA/project/product", interpret it as a full production-oriented audit.
 
-A. Projeto inteiro
-B. Expert Advisor principal
-C. Indicador
-D. Execução / ordens
-E. Gestão financeira / risco
-F. Painel / UI
-G. Licenciamento / backend
-H. Outro
+Automatically detect applicable audit domains and mark non-applicable domains N/A. Do not ask the user to choose every domain.
 
->
-```
+Default audit domains:
 
-Only show options that are materially relevant.
+1. Code correctness and MQL5 semantics
+2. Spec/documentation compliance
+3. Trading and operational logic
+4. Trade execution
+5. Position/order/deal state and ownership
+6. Financial risk and exposure
+7. Indicator/data correctness when present
+8. Strategy Tester/live fidelity
+9. Architecture and maintainability
+10. Performance/resource lifecycle
+11. UI/operational controls when present
+12. Licensing/backend/security when present
+13. Documentation consistency
+14. Regulatory/user-claim flags when materially relevant
 
-**Licensing**
+If the user names a narrower target, audit that target plus any adjacent domain required to reason about it safely.
 
-Ask only when licensing is relevant or still undecided:
+Example: "audit lot sizing" includes financial risk, symbol economics, margin, cumulative exposure, and execution constraints, but does not automatically expand into UI styling.
 
-```text
-3. Este produto utiliza ou utilizará licenciamento?
+## Independent audit passes
 
-A. Sim
-B. Não
-C. Já existe
-D. Ainda não definido
+A full audit must not be one giant checklist pass.
 
->
-```
+Use the applicable files in auditors/ as independent review briefs.
 
-**Licensing backend**
+When the harness supports sub-agents, run materially independent auditors in separate contexts, preferably in parallel. Prevent auditors from delegating recursively.
 
-Only if licensing applies:
+When sub-agents are unavailable, emulate independence with separate passes: finish one domain's evidence collection before beginning the next, and do not let one domain's conclusion become evidence for another.
 
-```text
-4. Como deseja tratar o backend de licenciamento?
+For each full EA audit, the minimum independent passes are:
 
-A. Criar backend e API
-B. Integrar backend existente
-C. Receber uma recomendação de arquitetura
-D. Não se aplica
-
->
-```
-
-**Documentation**
-
-```text
-5. Deseja criar uma documentação específica para esta tarefa ou projeto?
-
-A. Sim
-B. Não — apenas atualizar a documentação existente
-C. Decidir durante o planejamento
-
->
-```
-
-Existing relevant documentation must still be updated by default after approved project changes.
-
-**Source of truth**
-
-Ask only if needed after the user indicates there is a specific authoritative document. During the wizard, do not inspect the repository to discover it.
-
-**Exclusions**
-
-Ask what must not be changed, unless already explicit in the user's request.
-
-**Success criteria**
-
-Ask how the user will consider the task successful, unless already explicit.
-
-**Final open question**
-
-Always finish with a single open question, using the next sequential number:
-
-```text
-N. Explique com suas palavras o que você deseja fazer:
-
->
-```
-
-### After the wizard
-
-Only after the final open answer:
-
-1. show a concise requirements summary;
-2. begin repository discovery silently;
-3. inspect the project and applicable documentation;
-4. ask any newly required material follow-up questions **one at a time**, using the same numbered/lettered format;
-5. prepare the execution plan;
-6. request explicit approval;
-7. do not modify project files before approval.
-
-## Mandatory lifecycle
-
-After the questionnaire is answered, follow this state machine:
-
-```text
-DISCOVERY
-  -> REQUIREMENTS
-  -> DOCUMENTATION DECISION
-  -> PLAN
-  -> AWAITING_APPROVAL
-  -> EXECUTION
-  -> VALIDATION
-  -> DOCUMENTATION UPDATE
-  -> CONSISTENCY CHECK
-  -> COMPLETE
-```
-
-### DISCOVERY
-
-Inspect the repository before proposing implementation details.
-
-- Inventory relevant `.mq5`, `.mqh`, `.set`, config, tests, logs, presets, and documentation.
-- Identify the main EA/indicator and its dependencies.
-- Search for `docs/master.md`, `docs/prompt master.md`, `docs/design-system.md`, `docs/spec*.md`, `README*`, `CHANGELOG*`, architecture docs, licensing docs, and tester reports.
-- Use `scripts/inspect-mql5.sh` when useful. It is read-only.
-- Do not ask questions whose answers can be reliably determined from the repository.
-
-### REQUIREMENTS
-
-Determine the operating mode and resolve only material ambiguities.
-
-Read `workflows/<mode>.md` for the active mode. Load only the technical references needed for the task.
-
-### PLAN
-
-Before any source modification, present an execution plan containing:
-
-- mode;
-- objective;
-- files/components in scope;
-- explicit exclusions;
-- current behavior when relevant;
-- intended behavior;
-- implementation steps;
-- validation steps;
-- documentation files to create/update;
-- material risks;
-- success criteria;
-- open decisions requiring the user's choice.
-
-End with an explicit approval request such as `Posso executar este plano?`
-
-### AWAITING_APPROVAL
-
-Do not modify project source files while waiting for approval.
-
-A user response such as `sim`, `execute`, `pode executar`, or an equivalent explicit approval authorizes the approved plan.
-
-### EXECUTION
-
-After approval, execute the full approved plan autonomously. Do not interrupt for routine implementation details.
-
-Stop and request new approval only if a newly discovered fact materially changes one or more of:
-
-- scope;
-- trading strategy behavior;
+- code;
+- trading logic;
+- trade execution;
+- state/ownership;
 - financial risk;
 - architecture;
-- licensing/security model;
-- regulatory exposure;
-- user-facing behavior;
-- destructive or live-account actions.
+- spec compliance.
 
-### VALIDATION
+Add indicator, tester, performance, UI, licensing, and regulatory passes when applicable.
 
-Every code-changing task must end with the applicable quality gates:
+## Adversarial review
 
-1. **Compilation gate** — compile when a compiler is available. Never claim compilation occurred if it did not. If not run, report `COMPILATION NOT EXECUTED`.
-2. **Static correctness gate** — MQL5 API use, arrays, handles, state, errors, ownership, event logic.
-3. **Trading execution gate** — request validation, retcodes, transactions, fill/execution modes, position state.
-4. **Financial/risk gate** — lot sizing, stops, margin, cumulative exposure, daily limits, costs.
-5. **Regression gate** — mandatory for IMPROVE and DEBUG.
-6. **Tester fidelity gate** — when strategy behavior depends on tester assumptions.
-7. **Documentation consistency gate** — mandatory whenever project behavior or architecture changes.
+Auditors do not merely ask whether code looks reasonable. They try to break assumptions.
 
-### DOCUMENTATION UPDATE
+Build scenarios such as:
 
-Read `references/documentation-protocol.md`.
+- duplicate ticks or repeated same-bar signals;
+- partial fills and rejected requests;
+- delayed or reordered trade transactions;
+- reconnect or terminal restart;
+- stale selected position/order data;
+- netting versus hedging;
+- manual trades or another EA on the same symbol;
+- insufficient margin;
+- invalid volume/stops/filling mode;
+- spread or gap stress;
+- session transition and daily reset;
+- history arriving late;
+- invalid indicator handles;
+- multi-symbol bars that are not synchronized;
+- Strategy Tester behavior differing from live behavior.
 
-Any approved change to project behavior, architecture, parameters, risk, execution, buffers, UI, licensing, API, or operational assumptions must update the relevant documentation by default. This documentation update is part of the approved task and does not require a second approval.
+Only apply scenarios relevant to the discovered product.
 
-### COMPLETE
+## Evidence gate
 
-Report:
+Every reported finding must contain enough evidence for another engineer to verify it:
 
-- what changed;
-- files changed;
-- validation actually performed;
-- validation not performed;
-- documentation created/updated;
-- remaining risks/open decisions;
-- recommended next tests.
+- severity;
+- confidence;
+- nature;
+- file and function/scope, with lines or a short excerpt when available;
+- the exact assumption or invariant that fails;
+- a concrete failure scenario;
+- operational/financial/user impact;
+- recommended correction or decision;
+- authoritative technical reference when MQL5 semantics materially matter.
+
+Confidence labels:
+
+- CONFIRMED BY CODE
+- CONFIRMED BY OFFICIAL DOCUMENTATION
+- PROBABLE RISK
+- HYPOTHESIS - TEST REQUIRED
+- BROKER / ENVIRONMENT DEPENDENT
+
+Severity:
+
+- CRITICAL: plausible path to uncontrolled financial exposure, wrong-position action, protection failure, destructive state corruption, or product behavior unsafe for production.
+- HIGH: serious correctness or operational failure that can materially alter trading behavior, execution, state, or customer operation.
+- MEDIUM: real defect or robustness gap with bounded impact.
+- LOW: maintainability, clarity, local resilience, or minor UX problem.
+- INFO: observation without a defect claim.
+
+CRITICAL and HIGH findings require a verification pass before the final report. Re-read the relevant code path and try to falsify the finding. If the evidence does not survive, downgrade or remove it.
+
+Do not inflate findings. Do not suppress findings merely because the project compiles.
+
+## Coverage gate
+
+A clean report is not valid unless critical paths were actually inspected.
+
+Before saying there are no CRITICAL/HIGH findings, report audit coverage:
+
+- runtime entry points traced;
+- trade lifecycle traced;
+- risk/exposure path traced;
+- state/ownership path traced;
+- spec sources checked;
+- applicable tester/indicator/licensing/UI paths checked.
+
+If a material path could not be inspected, report LIMITED COVERAGE rather than implying the project is clean.
 
 ## Source authority
 
-Read `references/source-policy.md` whenever a conclusion depends on MQL5 semantics or an external technical claim.
+For MQL5 language, API, runtime, event, trade, symbol, indicator, and Strategy Tester semantics, current official MQL5 documentation is the primary authority.
 
-Core rule:
+Read references/source-policy.md when a conclusion depends on external semantics.
 
-> Current official MQL5 documentation is the primary authority for language, API, event, trading, symbol, indicator, and Strategy Tester behavior.
+Repository docs are the primary authority for intended product behavior unless code and docs explicitly establish a newer source of truth.
 
-If a current official source cannot confirm a high-impact behavior, do not invent it. Use one of:
+Never invent requirements from the implementation and then claim the implementation violates them.
 
-- `CONFIRMED BY CODE`
-- `CONFIRMED BY OFFICIAL DOCUMENTATION`
-- `PROBABLE RISK`
-- `HYPOTHESIS — TEST REQUIRED`
-- `BROKER / ENVIRONMENT DEPENDENT`
+## Architecture vocabulary
 
-## Reference loading
+Use engineering/codebase-design.md when assessing or designing architecture.
 
-Load only what is relevant:
+Prefer:
+- coherent modules;
+- small, explicit interfaces;
+- complexity hidden behind stable seams;
+- locality of state, risk, execution, and persistence behavior;
+- testability through meaningful interfaces.
 
-- Core MQL5 correctness: `references/mql5-engineering.md`
-- Expert Advisors: `references/expert-advisor.md`
-- Indicators: `references/indicator.md`
-- Trade requests/execution: `references/trade-execution.md`
-- Trade state/transactions: `references/trade-state.md`
-- Financial risk: `references/trading-risk.md`
-- Symbol/market portability: `references/market-instrument.md`
-- Grid/scaling/pyramiding: `references/position-scaling.md`
-- Strategy Tester: `references/tester-validation.md`
-- Optimization robustness: `references/optimization.md`
-- Multi-symbol/timeframe: `references/multi-symbol.md`
-- Debugging method: `references/debugging.md`
-- Performance: `references/performance.md`
-- UI/design: `references/ui-design.md`
-- Licensing/security: `references/licensing-security.md`
-- Backend options: `references/licensing-backend.md`
-- API design: `references/api-contract.md`
-- Regulatory review: `references/regulatory-compliance.md`
-- Documentation: `references/documentation-protocol.md`
-- Audit output: `references/report-template.md`
+Look especially for:
+- God OnTick / God OnCalculate handlers;
+- trade logic duplicated across event handlers;
+- state scattered across unrelated globals;
+- wrappers that add no useful abstraction;
+- architecture that makes critical behavior impossible to test in isolation;
+- execution and risk decisions spread across many call sites.
 
-## Safety contract
+Architecture findings are not automatically defects. Tie them to observed friction, risk, duplication, change cost, or inability to verify behavior.
 
-- Never send live trades or use real money to test code.
-- Never alter a broker account, live position, or production license system merely to validate behavior.
-- Never claim that source review proves profitability.
-- Never claim a backtest, compile, broker behavior, or market result that was not actually observed.
-- Treat uncontrolled exposure, incorrect lot sizing, wrong-position actions, missing protection, duplicate entries, and cross-EA interference as potential production blockers.
-- A licensing failure may block **new exposure**, but must not disable protective management of already-open positions.
-- Do not place administrative secrets, database credentials, service-role keys, or master licensing secrets in distributed `.mq5`/`.ex5` clients.
+## Domain vocabulary
 
-## Project naming neutrality
+Use engineering/domain-modeling.md when project terminology is ambiguous or inconsistent.
 
-This skill is generic. Do not hardcode company names, commercial robot names, design theme names, B3 symbols, Forex symbols, or product-specific rules into the skill. Discover them from the repository and user requirements.
+Prefer the project's existing canonical terms. Distinguish signal, setup, order, deal, position, exposure, protection, session, license, activation, entitlement, and other concepts when the distinction matters.
 
-B3 can be a primary target market while the architecture remains portable to Forex, metals such as XAUUSD, CFDs, indices, and other instruments supported by MetaTrader 5.
+## Testing
+
+Use engineering/testing.md for validation design.
+
+Tests and tester scenarios should validate behavior through meaningful seams, not merely mirror implementation details.
+
+Compilation proves syntax/build correctness only. It does not prove trading correctness, safety, or profitability.
+
+## Documentation
+
+Documentation is part of done for code-changing tasks.
+
+After approved changes:
+- update existing relevant docs by default;
+- prefer existing source-of-truth documents over creating duplicates;
+- update changelog when the project already uses one and the change is material;
+- keep code, documented defaults, strategy rules, timing, risk, UI, licensing, and API behavior consistent.
+
+AUDIT and REVIEW are read-only with respect to source code. They may produce a report when the user's request implies a deliverable.
+
+## Approval boundary
+
+Read-only discovery, diagnosis, review, and audit do not require a planning approval.
+
+Source-code modification does.
+
+Before BUILD, IMPROVE, or a DEBUG fix:
+1. discover;
+2. resolve only blocking decisions;
+3. present a concise implementation plan;
+4. request approval;
+5. execute only after approval.
+
+If the user explicitly provided a complete approved plan and asked for execution, do not force a redundant questionnaire.
+
+## Safety
+
+- Never place live trades or use real money for validation.
+- Never claim profitability from code review, compilation, backtests, or optimization.
+- Never modify a live broker account or production licensing system merely to test.
+- Licensing failure may block new exposure but must not disable protective management of existing positions.
+- Never put administrative secrets, service-role keys, database credentials, or master licensing secrets in distributed MQL5 clients.
+
+## Completion
+
+BUILD / IMPROVE / DEBUG:
+- implementation performed;
+- applicable validation performed;
+- focused post-change review performed;
+- docs updated;
+- unperformed validation explicitly listed.
+
+REVIEW:
+- fixed point and reviewed diff are explicit;
+- standards/spec/bug-risk findings are evidence-backed;
+- unchanged code outside the diff is not blamed unless required to explain a changed behavior.
+
+AUDIT:
+- scope was derived from the actual project;
+- applicable auditor passes completed;
+- coverage limitations stated;
+- findings de-duplicated by root cause;
+- CRITICAL/HIGH findings re-verified;
+- production readiness reported as READY, CONDITIONAL, BLOCKED, or LIMITED COVERAGE.
+
+Do not produce numeric /10 quality scores.

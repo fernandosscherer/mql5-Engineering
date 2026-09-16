@@ -1,56 +1,81 @@
 # BUILD workflow
 
-Use when creating a new Expert Advisor, indicator, library, panel, licensing client, or related MQL5 component.
+Use BUILD for a new EA, indicator, library, panel, licensing client, or related component.
 
-## Before implementation
+## 1. Discover before interviewing
 
-After the initial questionnaire and repository discovery, determine the minimum set of missing requirements.
+If the repository exists, inspect its conventions, reusable modules, docs, architecture, testing style, and market assumptions first.
 
-For an EA, clarify when not already specified:
+Do not ask for facts that can be learned from the repository.
 
-- markets/instruments and portability requirements;
-- timeframe(s);
-- entry and exit rules;
-- current-bar versus closed-bar behavior;
-- stop loss / take profit / trailing / breakeven;
-- lot model: fixed, monetary risk, percentage risk, or other;
-- maximum exposure and scaling/grid rules;
-- daily loss/gain and trade-count limits;
-- operating window, entry cutoff, forced close;
-- netting/hedging requirements;
-- state after restart/reconnect;
-- UI/panel requirements;
-- licensing/backend requirements;
-- tester expectations.
+For greenfield work, infer nothing that changes strategy or risk.
 
-For an indicator, clarify when not already specified:
+## 2. Define the behavioral contract
 
-- visual, EA-consumed, or both;
-- buffers and their semantic contract;
-- timeframe/symbol dependencies;
-- current-bar versus closed-bar signal semantics;
-- whether historical values may recalculate;
-- plotting/UI requirements;
-- expected behavior when history is incomplete.
+Identify the minimum unresolved product decisions.
 
-## Architecture before code
+For an EA, decisions may include:
+- signal and entry semantics;
+- exit/protection semantics;
+- lot/risk model;
+- exposure/scaling rules;
+- session and forced-close behavior;
+- account-mode requirements;
+- restart/reconnect behavior;
+- user-facing controls;
+- licensing requirements.
+
+For an indicator:
+- visual versus machine-consumed purpose;
+- buffer contract;
+- current-bar versus closed-bar semantics;
+- repaint/recalculation policy;
+- symbol/timeframe dependencies.
+
+Ask only decisions that remain unknown after discovery, one at a time.
+
+## 3. Design
+
+Use engineering/codebase-design.md.
 
 Define:
+- modules and responsibilities;
+- public seams/interfaces;
+- state ownership;
+- data flow;
+- execution/risk invariants;
+- failure behavior;
+- validation seams;
+- documentation updates.
 
-1. components/files;
-2. state model;
-3. data flow;
-4. trade/indicator contract;
-5. risk and failure invariants;
-6. documentation plan;
-7. validation plan.
+Prefer a small number of meaningful seams over many shallow wrappers.
 
-Do not generate a large implementation before the plan is approved.
+## 4. Plan and approval
 
-## After code
+Present a concise implementation plan:
+- intended behavior;
+- files/modules;
+- invariants;
+- validation;
+- docs;
+- risks.
 
-Perform self-review using AUDIT criteria applicable to the new component. A BUILD task is not complete with only code generation.
+Request approval before source modification.
 
-## Final audit gate
+## 5. Implement in vertical slices
 
-After implementation and validation, run a final self-audit using the applicable AUDIT criteria before documentation is considered complete. Record unresolved findings and do not present the task as complete when a production blocker remains.
+Build one coherent behavior path at a time.
+
+Validate each slice through the highest practical seam rather than writing a large unverified implementation first.
+
+## 6. Validate and self-review
+
+Apply:
+- compile gate when compiler is available;
+- code correctness;
+- execution/state/risk checks when relevant;
+- tester fidelity when relevant;
+- focused post-change REVIEW;
+- documentation consistency.
+
+BUILD is not complete at "code generated".

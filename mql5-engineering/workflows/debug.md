@@ -1,52 +1,82 @@
 # DEBUG workflow
 
-Use when behavior is incorrect, intermittent, inconsistent between tester/live, or unexplained.
+Use DEBUG when the user reports a concrete defect, regression, intermittent failure, wrong trade behavior, tester/live mismatch, or performance problem.
 
-## Investigation order
+The goal is root cause, not a plausible patch.
 
-1. Symptom.
-2. Expected behavior.
-3. Actual behavior.
-4. Environment: tester/demo/live report supplied by user; account mode; symbol; timeframe; version.
-5. Reproduction path or best available trace.
-6. Candidate causes.
-7. Evidence collection.
-8. Root cause classification.
-9. Minimal safe correction.
-10. Regression checks.
+## 1. Establish the symptom
 
-## Root cause labels
+Inspect available logs, code, tester reports, docs, presets, and recent changes before asking the user.
 
-Use exactly one when presenting the main conclusion:
+Ask only for user-only information required to reproduce the exact symptom.
 
-- `CONFIRMED ROOT CAUSE`
-- `PROBABLE ROOT CAUSE`
-- `HYPOTHESIS — TEST REQUIRED`
+Define:
+- expected behavior;
+- observed behavior;
+- environment;
+- reproducible trigger or best available trace.
 
-Do not patch a symptom merely to make it disappear if the root cause remains unknown.
+## 2. Build a feedback loop
 
-## Common MQL5 bug families
+Before theorizing deeply, create the tightest safe signal that can distinguish broken from fixed.
 
-Check as applicable:
+MQL5 examples:
+- Strategy Tester preset reproducing the wrong trade;
+- deterministic log assertion;
+- minimal symbol/timeframe test;
+- script/harness calling a pure risk or calculation module;
+- replay of a captured price/state sequence;
+- differential run between known-good and failing versions.
 
-- duplicate signal / duplicate same-bar entry;
-- state updated before trade confirmation;
-- event-order assumptions;
-- retcode ignored;
-- retry logic duplicating orders;
-- stale position/order selection;
-- Magic/position ownership collision;
-- netting versus hedging assumption;
-- CopyBuffer/indexing/current-bar error;
-- unsynchronized symbol/timeframe data;
-- time/session/reset bug;
-- restart/reconnect state loss;
-- hardcoded symbol economics;
-- invalid filling/stops/volume;
-- tester-only behavior.
+If no reliable loop is possible, state that explicitly and identify the missing artifact or environment.
 
-After the fix, document cause, correction, validation, and prevention when the user requested a dedicated task document.
+## 3. Reproduce and minimize
 
-## Final audit gate
+Run the loop and confirm it catches the user's actual bug.
 
-After verifying the fix, run a focused final audit to confirm the correction did not introduce execution, state, risk, market-compatibility, or documentation regressions.
+Reduce the scenario until unrelated conditions are removed while the failure remains.
+
+## 4. Hypotheses
+
+Generate 3-5 ranked, falsifiable hypotheses.
+
+Each must predict what evidence would strengthen or weaken it.
+
+Do not patch the first plausible explanation.
+
+## 5. Instrument
+
+Instrument only boundaries that distinguish hypotheses.
+
+For trading defects, prefer evidence around:
+- signal creation;
+- state before request;
+- request/retcode;
+- transaction/deal/position confirmation;
+- ownership selection;
+- risk state before/after event.
+
+Tag temporary diagnostics so they can be removed.
+
+## 6. Root cause and plan
+
+Classify:
+- CONFIRMED ROOT CAUSE
+- PROBABLE ROOT CAUSE
+- HYPOTHESIS - TEST REQUIRED
+
+Before modifying source, present the smallest safe correction and regression plan. Request approval.
+
+## 7. Fix and regress
+
+After approval:
+- add a regression check at the best available seam when practical;
+- apply the minimal correction;
+- re-run the original feedback loop;
+- run adjacent risk/state/execution checks;
+- remove temporary instrumentation;
+- update documentation when behavior or assumptions changed.
+
+## 8. Post-fix review
+
+Run a focused review of the corrected path. Do not declare success because the symptom disappeared if the root cause remains unverified.

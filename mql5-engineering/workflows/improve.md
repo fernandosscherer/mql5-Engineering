@@ -1,39 +1,57 @@
 # IMPROVE workflow
 
-Use for feature additions, refactors, UI changes, risk changes, licensing additions, and other modifications to an existing project.
+Use IMPROVE for feature additions, refactors, UI changes, risk changes, licensing additions, or behavior changes to an existing project.
 
-## Principle
+## 1. Discover current behavior
 
-Preserve unrelated behavior. Do not turn a feature request into an unsolicited rewrite.
+Read the relevant implementation and source-of-truth docs before asking questions.
 
-Classify the change:
-
-- PATCH — small/local change;
-- FEATURE — new behavior;
-- REFACTOR — structural change without intended strategy behavior change.
-
-## Required pre-change analysis
-
-Document:
-
+Establish:
 - current behavior;
 - requested behavior;
-- affected files/functions/states;
-- financial/execution implications;
-- UI/documentation impact;
-- likely regression points.
+- affected seams/state;
+- execution/risk implications;
+- likely regression surfaces.
 
-If the requested improvement changes strategy semantics, risk, or position management, make that explicit in the plan.
+## 2. Classify the change
 
-## Required completion
+- PATCH: small local correction or adjustment.
+- FEATURE: new externally meaningful behavior.
+- REFACTOR: structural change with no intended behavioral change.
 
-- implement approved change;
-- compile if available;
-- run static/trading/risk checks as applicable;
-- perform regression review;
-- update documentation;
-- record material changes in an existing changelog if the project uses one.
+Do not turn a PATCH into a rewrite.
 
-## Final audit gate
+## 3. Resolve only decisions
 
-After regression validation, perform a focused final audit of the changed execution, risk, state, UI, licensing, and documentation surfaces that are relevant to the modification. Resolve or report blockers before completion.
+If the repository already answers a question, do not ask it.
+
+Ask only when a material product, trading, risk, architecture, UI, licensing, or compatibility decision remains unresolved.
+
+## 4. Plan and approval
+
+State:
+- what will change;
+- what must remain unchanged;
+- files/modules/seams affected;
+- regression risks;
+- validation plan;
+- docs to update.
+
+Request approval before source modification.
+
+## 5. Execute
+
+Preserve unrelated behavior.
+
+Prefer changes that improve locality rather than scattering new branches across event handlers.
+
+## 6. Regression and review
+
+Validate:
+- intended new behavior;
+- unchanged adjacent behavior;
+- execution/state/risk implications;
+- tester behavior when applicable;
+- documentation consistency.
+
+Run a focused REVIEW on the resulting diff before completion.
