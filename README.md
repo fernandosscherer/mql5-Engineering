@@ -1,7 +1,6 @@
 # MQL5 Engineering
 
-![Uploading ChatGPT Image 16 de set. de 2026, 16_57_50.png…]()
-
+<img width="1672" height="941" alt="ChatGPT Image 16 de set  de 2026, 16_57_50" src="https://github.com/user-attachments/assets/d03259f8-0afb-4986-a201-1216078c3100" />
 
 **Build • Improve • Debug • Audit**
 
