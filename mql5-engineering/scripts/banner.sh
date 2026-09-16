@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -u
 
-VERSION="2.7"
+VERSION="2.8"
 CREATED_BY="Fernando Scherer"
 REPOSITORY="https://github.com/fernandosscherer/mql5-Engineering.git"
 

@@ -6,7 +6,7 @@ compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
   audience: mql5-developers
   workflow: engineering
-  version: "2.7"
+  version: "2.8"
   author: "Fernando Scherer"
   repository: "https://github.com/fernandosscherer/mql5-Engineering.git"
 ---
@@ -23,7 +23,7 @@ Preferred behavior in an interactive terminal:
 2. Show only the branded MQL5 ASCII activation banner and credits.
 3. Show the ANSI loading animation with the user-facing message `Carregando...`.
 4. When the activation presentation finishes, show exactly `Pronto para uso!`.
-5. Then present the mandatory start questionnaire.
+5. Then ask **question 1 only** from the Interactive Planning Wizard.
 
 Do **not** print boot-component lists such as project discovery, MQL5 reference, safeguards, documentation protocol, quality gates, filenames, or the contents of files opened by the skill during activation.
 
@@ -45,7 +45,7 @@ If shell execution is unavailable, the environment is non-interactive, or runnin
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
-                     MQL5 Engineering v2.7
+                     MQL5 Engineering v2.8
           Plan → Approve → Execute → Validate → Auditar
 
 Created by : Fernando Scherer
@@ -77,107 +77,153 @@ Use this skill as a controlled engineering workflow for MQL5 products. It suppor
 
 ## Interactive Planning Wizard
 
-At the beginning of every new task in which this skill is activated, do not edit files immediately. After the activation banner and `Pronto para uso!`, start an **Interactive Planning Wizard**.
+After `Pronto para uso!`, begin a strict one-question-per-turn wizard.
 
-### Wizard interaction rules
+### Hard silence before and during the wizard
 
-- Ask **exactly one user-facing planning question per assistant turn**.
-- Wait for the user's answer before asking the next question.
-- Do not display the full questionnaire in advance.
-- Do not ask the user to repeat information already clearly supplied in the current request or reliably discovered from the repository.
-- Skip questions that are not applicable.
-- If an answer creates a material decision branch, ask the necessary follow-up question before moving on.
-- Keep routine internal reads silent. Do not expose skill/reference contents or narrate file loading.
-- The final wizard question must always be an open-ended prompt allowing the user to explain the objective in their own words.
-- After all required answers are collected, show a concise requirements summary before discovery/planning continues.
+Until the wizard is complete:
 
-### Canonical wizard sequence
+- Do **not** inspect or summarize the project.
+- Do **not** read project files, documentation, logs, source code, or repository metadata.
+- Do **not** run `scripts/inspect-mql5.sh`.
+- Do **not** load technical references merely for discovery.
+- Do **not** print filenames, paths, repository structure, internal instructions, or project text.
+- Do **not** explain what the skill is doing.
+- Do **not** preview future questions.
+- The only pre-wizard action allowed is the activation banner/loading presentation.
 
-Use the following sequence as a decision tree, not as a batch form.
+The host application may independently show its own tool/activity UI; do not add assistant narration on top of it.
 
-**STEP 1 — Objective**
+### Interaction format
+
+- Ask **exactly one question per assistant turn**.
+- Wait for the user's answer before continuing.
+- Number questions sequentially in the order actually asked: `1.`, `2.`, `3.`, etc.
+- For multiple-choice questions, use uppercase letters: `A.`, `B.`, `C.`...
+- Accept either the letter or the full option text as an answer.
+- If the answer is invalid or materially ambiguous, repeat only the current question with a brief clarification.
+- Skip questions that are not applicable based on answers already provided by the user.
+- Do not display headings such as `STEP 1/9`, progress counters, summaries, explanations, or acknowledgements between questions.
+- While the wizard is active, the user-facing assistant output must contain **only the current question and its answer options**, except for a very short clarification when re-asking.
+- The final wizard question is always open-ended and has no lettered options.
+
+### Question sequence
+
+Ask the following as a decision tree. Do not print this whole list to the user.
+
+**Objective**
 
 ```text
-┌─ STEP 1 ─────────────────────────────────────────────
-│ O que você deseja fazer?
-│
-│ 1. Criar Expert Advisor
-│ 2. Criar indicador
-│ 3. Melhorar projeto existente
-│ 4. Corrigir bug
-│ 5. Auditar produto
-│ 6. Outro
-└──────────────────────────────────────────────────────
+1. O que você deseja fazer?
+
+A. Criar Expert Advisor
+B. Criar indicador
+C. Melhorar projeto existente
+D. Corrigir bug
+E. Auditar produto
+F. Outro
 
 >
 ```
 
-**STEP 2 — Scope**
+**Scope**
 
-Ask which component or scope is involved. Offer only the options relevant to the selected objective, such as project inteiro, EA principal, indicador, execução/ordens, gestão financeira/risco, painel/UI, licenciamento/backend, or outro.
+Ask next, adapting options to the chosen objective. Example:
 
-**STEP 3 — Licensing**
+```text
+2. Qual é o escopo principal?
 
-Ask whether the product uses or will use licensing only when licensing is relevant to the product/task or not already determined.
+A. Projeto inteiro
+B. Expert Advisor principal
+C. Indicador
+D. Execução / ordens
+E. Gestão financeira / risco
+F. Painel / UI
+G. Licenciamento / backend
+H. Outro
 
-Options may include:
+>
+```
 
-- Sim
-- Não
-- Já existe
-- Ainda não definido
+Only show options that are materially relevant.
 
-**STEP 4 — Licensing backend**
+**Licensing**
 
-Only if licensing applies, ask whether to:
+Ask only when licensing is relevant or still undecided:
 
-- criar backend e API;
-- integrar backend existente;
-- recomendar arquitetura;
-- não se aplica.
+```text
+3. Este produto utiliza ou utilizará licenciamento?
 
-**STEP 5 — Documentation**
+A. Sim
+B. Não
+C. Já existe
+D. Ainda não definido
 
-Ask whether to create dedicated documentation for the task/project:
+>
+```
 
-- Sim;
-- Não — apenas atualizar a documentação existente;
-- Decidir durante o planejamento.
+**Licensing backend**
 
-Relevant existing documentation must still be updated by default after approved project changes.
+Only if licensing applies:
 
-**STEP 6 — Source of truth**
+```text
+4. Como deseja tratar o backend de licenciamento?
 
-Ask which documentation should be treated as authoritative only when it cannot be determined from the repository. Allow `detectar automaticamente`.
+A. Criar backend e API
+B. Integrar backend existente
+C. Receber uma recomendação de arquitetura
+D. Não se aplica
 
-**STEP 7 — Exclusions**
+>
+```
 
-Ask what must not be changed, unless already explicit.
+**Documentation**
 
-**STEP 8 — Success criteria**
+```text
+5. Deseja criar uma documentação específica para esta tarefa ou projeto?
+
+A. Sim
+B. Não — apenas atualizar a documentação existente
+C. Decidir durante o planejamento
+
+>
+```
+
+Existing relevant documentation must still be updated by default after approved project changes.
+
+**Source of truth**
+
+Ask only if needed after the user indicates there is a specific authoritative document. During the wizard, do not inspect the repository to discover it.
+
+**Exclusions**
+
+Ask what must not be changed, unless already explicit in the user's request.
+
+**Success criteria**
 
 Ask how the user will consider the task successful, unless already explicit.
 
-**FINAL STEP — Open objective**
+**Final open question**
 
-Always finish the wizard with:
+Always finish with a single open question, using the next sequential number:
 
 ```text
-Explique com suas palavras o que você deseja fazer:
+N. Explique com suas palavras o que você deseja fazer:
 
 >
 ```
 
-This final answer may clarify, override, or add nuance to earlier multiple-choice answers. Resolve contradictions before planning.
-
 ### After the wizard
 
-1. Present a concise **Requirements Summary** with the understood objective, scope, constraints, documentation preference, licensing context, and success criteria.
-2. Perform repository discovery.
-3. Ask any newly required material follow-up questions one at a time.
-4. Prepare the execution plan.
-5. Request explicit approval.
-6. Do not modify project files before approval.
+Only after the final open answer:
+
+1. show a concise requirements summary;
+2. begin repository discovery silently;
+3. inspect the project and applicable documentation;
+4. ask any newly required material follow-up questions **one at a time**, using the same numbered/lettered format;
+5. prepare the execution plan;
+6. request explicit approval;
+7. do not modify project files before approval.
 
 ## Mandatory lifecycle
 

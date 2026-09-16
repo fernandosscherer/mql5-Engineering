@@ -39,7 +39,7 @@ Examples:
   ./install.sh
   ./install.sh update
   ./install.sh install --target opencode
-  ./install.sh install --target project --ref v2.7
+  ./install.sh install --target project --ref v2.8
   ./install.sh uninstall --target universal --yes
 USAGE
 }

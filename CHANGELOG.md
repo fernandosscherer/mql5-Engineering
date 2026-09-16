@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.8 — 2026-09-15
+
+- Enforced a strict one-question-per-turn Interactive Planning Wizard.
+- Changed wizard choices from numeric options to letters (A, B, C...).
+- Added sequential question numbering: `1. Pergunta`, `2. Pergunta`, etc.
+- During the wizard, the assistant output is limited to the current question and its options only.
+- Added a hard pre-wizard silence rule: no project discovery, file reads, repository scans, reference loading narration, or project summaries before the wizard is complete.
+- The only allowed activation action before question 1 is the branded banner/loading presentation.
+- Future wizard questions must never be previewed or printed in a batch.
+- Invalid/ambiguous answers cause only the current question to be repeated.
+- Updated version to 2.8.
+
 ## 2.7 — 2026-09-15
 
 - Replaced the grouped startup questionnaire with an Interactive Planning Wizard.
