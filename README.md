@@ -267,26 +267,33 @@ Existing installations are backed up before replacement unless `--no-backup` is 
 
 ## Terminal experience
 
-Activation keeps the UI intentionally minimal:
+The installer and activation experience use a monochrome retro-green terminal identity. The installer now combines the large MQL5 ASCII mark with a compact candlestick market panel.
 
 ```text
-╔══════════════════════════════════════════════════════════════════════════╗
-║                                                                          ║
-║                       MQL5  E N G I N E E R I N G                       ║
-║                                                                          ║
-║      [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]               ║
-║                                                                          ║
-╚══════════════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                                    ║
+║   ███╗   ███╗ ██████╗ ██╗     ███████╗                       │  MARKET // EURUSD H1                                ║
+║   ████╗ ████║██╔═══██╗██║     ██╔════╝                       │                                                     ║
+║   ██╔████╔██║██║   ██║██║     ███████╗                       │  1.1060 ┤                                      │    ║
+║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                       │  1.1040 ┤                               │     █    ║
+║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                       │  1.1020 ┤                         │     █     │    ║
+║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                       │  1.1000 ┤                    │    █ │   █     ║
+║                                                               │  1.0980 ┤              │     █ │ █         ║
+║                 E N G I N E E R I N G                         │  1.0960 ┤         │    █ │  █              ║
+║                                                               │  1.0940 ┤    │    █ │  █                  ║
+║                         I N S T A L L E R                      │  1.0920 ┤    █ │  █                       ║
+║                                                               │  1.0900 ┼─│──█─│──────────────────────── ║
+║      [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]     │             ↑ trend / structure           ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
                      MQL5 Engineering v3.0
              Discover → Route → Engineer → Validate → Audit
                   Facts → Agent | Decisions → User
-
-Carregando...
-Pronto para uso!
 ```
 
-ANSI output uses a monochrome retro green terminal palette. `NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` are supported.
+The candlestick panel is decorative terminal art only; it does not display live market data.
+
+ANSI output uses bright, normal, and dim green only. `NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` are supported.
 
 ---
 
