@@ -91,16 +91,41 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 hero() {
-  printf '\n%s╔════════════════════════════════════════════════════════════════════╗%s\n' "$GB" "$R"
-  printf '%s║                     MQL5 ENGINEERING v%-4s                       ║%s\n' "$GB" "$INSTALLER_VERSION" "$R"
-  printf '%s║                          INSTALLER                                ║%s\n' "$GB" "$R"
-  printf '%s║                                                                    ║%s\n' "$GB" "$R"
-  printf '%s║       [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]       ║%s\n' "$GB" "$R"
-  printf '%s╚════════════════════════════════════════════════════════════════════╝%s\n' "$GB" "$R"
-  printf '%sRepository : https://github.com/%s%s\n' "$GD" "$REPO_SLUG" "$R"
-  printf '%sAction     : %s%s\n' "$GD" "$ACTION" "$R"
-  printf '%sTarget     : %s%s\n' "$GD" "$TARGET" "$R"
-  printf '%sRef        : %s%s\n\n' "$GD" "$REF" "$R"
+  local hero_lines=(
+'╔══════════════════════════════════════════════════════════════════════════╗'
+'║                                                                          ║'
+'║   ███╗   ███╗ ██████╗ ██╗     ███████╗                                 ║'
+'║   ████╗ ████║██╔═══██╗██║     ██╔════╝                                 ║'
+'║   ██╔████╔██║██║   ██║██║     ███████╗                                 ║'
+'║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                                 ║'
+'║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                                 ║'
+'║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                                 ║'
+'║                                                                          ║'
+'║                 E N G I N E E R I N G                                   ║'
+'║                                                                          ║'
+'║                         I N S T A L L E R                                ║'
+'║                                                                          ║'
+'║      [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]               ║'
+'║                                                                          ║'
+'╚══════════════════════════════════════════════════════════════════════════╝'
+  )
+
+  local line
+  printf '\n'
+  for line in "${hero_lines[@]}"; do
+    printf '%s%s%s\n' "$GB" "$line" "$R"
+    if [[ "$STATIC" -eq 0 && -t 1 ]]; then
+      sleep 0.008
+    fi
+  done
+
+  printf '\n%s                     MQL5 Engineering v%s%s\n' "$GB" "$INSTALLER_VERSION" "$R"
+  printf '%s             Discover → Route → Engineer → Validate → Audit%s\n' "$G" "$R"
+  printf '%s                  Facts → Agent | Decisions → User%s\n' "$GD" "$R"
+  printf '\n%sRepository :%s https://github.com/%s\n' "$GD" "$R" "$REPO_SLUG"
+  printf '%sAction     :%s %s\n' "$GD" "$R" "$ACTION"
+  printf '%sTarget     :%s %s\n' "$GD" "$R" "$TARGET"
+  printf '%sRef        :%s %s\n\n' "$GD" "$R" "$REF"
 }
 
 status() {
