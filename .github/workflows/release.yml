@@ -20,10 +20,23 @@ jobs:
         run: |
           set -euo pipefail
           TAG="${GITHUB_REF_NAME#v}"
-          VERSION="$(awk '/^[[:space:]]*version:[[:space:]]*/ {gsub(/["[:space:]]/, "", $2); print $2; exit}' mql5-engineering/SKILL.md)"
-          echo "Tag: $TAG"
-          echo "Skill: $VERSION"
-          test "$TAG" = "$VERSION"
+          SKILL_VERSION="$(awk '/^[[:space:]]*version:[[:space:]]*/ {gsub(/["[:space:]]/, "", $2); print $2; exit}' mql5-engineering/SKILL.md)"
+          ROOT_VERSION="$(tr -d '[:space:]' < VERSION)"
+          BANNER_VERSION="$(sed -n 's/^VERSION="\([^"]*\)"/\1/p' mql5-engineering/scripts/banner.sh | head -1)"
+          test "$TAG" = "$SKILL_VERSION"
+          test "$TAG" = "$ROOT_VERSION"
+          test "$TAG" = "$BANNER_VERSION"
+
+      - name: Validate required v3 structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f mql5-engineering/workflows/review.md
+          test -f mql5-engineering/auditors/code.md
+          test -f mql5-engineering/auditors/risk.md
+          test -f mql5-engineering/auditors/spec-compliance.md
+          test -f mql5-engineering/engineering/codebase-design.md
+          test -f mql5-engineering/engineering/evidence.md
 
       - name: Validate shell scripts
         shell: bash

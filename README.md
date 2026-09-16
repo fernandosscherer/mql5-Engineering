@@ -1,62 +1,86 @@
 # MQL5 Engineering
 
-<img width="1672" height="941" alt="ChatGPT Image 16 de set  de 2026, 16_57_50" src="https://github.com/user-attachments/assets/d03259f8-0afb-4986-a201-1216078c3100" />
+<img width="1672" height="941" alt="MQL5 Engineering" src="https://github.com/user-attachments/assets/d03259f8-0afb-4986-a201-1216078c3100" />
 
-**Build • Improve • Debug • Audit**
+**Build • Improve • Debug • Review • Audit**
 
-Production-oriented engineering skill for MQL5 Expert Advisors, indicators, libraries, panels, licensing, backend integration, testing, risk review, and documentation maintenance.
+Production-oriented engineering system for MQL5 Expert Advisors, indicators, libraries, panels, licensing, backend integration, debugging, code review, product audit, testing, financial-risk review, and documentation maintenance.
 
-**Created by:** Fernando Scherer
+**Created by:** Fernando Scherer  
 **Repository:** https://github.com/fernandosscherer/mql5-Engineering
 
 ## Quick install
-
-Recommended universal installation:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash
 ```
 
-The default target is:
+Default target:
 
 ```text
 ~/.agents/skills/mql5-engineering
 ```
 
-Then restart your AI agent/session and activate the skill:
+Then restart your AI agent/session and use:
 
 ```text
-Use the mql5-engineering skill.
+Use the mql5-engineering skill to audit this EA.
 ```
 
-## Safer install: inspect before executing
+## Engineering model
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh -o install.sh
-less install.sh
-bash install.sh
+MQL5 Engineering v3.0 uses an intelligent router instead of a mandatory questionnaire.
+
+> **Facts are the agent's job. Decisions are the user's job.**
+
+The skill first performs silent repository discovery, selects the narrowest workflow, loads only relevant technical modules, and asks questions only when a material decision cannot be inferred safely.
+
+### Modes
+
+- **BUILD** — create EAs, indicators, libraries, panels, and integrations.
+- **IMPROVE** — improve existing projects while preserving unrelated behavior.
+- **DEBUG** — reproduce, hypothesize, establish root cause, fix, and regress.
+- **REVIEW** — review a bounded change such as a branch, commit, PR, or diff.
+- **AUDIT** — adversarial product audit with independent technical passes and evidence-backed findings.
+
+## Workflow
+
+```text
+Intent
+   ↓
+Silent discovery
+   ↓
+Router
+   ├─ BUILD
+   ├─ IMPROVE
+   ├─ DEBUG
+   ├─ REVIEW
+   └─ AUDIT
+   ↓
+Applicable engineering / audit modules
+   ↓
+Evidence / validation
+   ↓
+Documentation
 ```
+
+For code-changing work:
+
+```text
+Discover → Plan → Approve → Execute → Validate → Review → Document
+```
+
+A full audit automatically determines which domains apply. It does not ask the user to manually choose code, logic, risk, architecture, UI, licensing, or other surfaces that can be discovered from the project.
 
 ## Install targets
 
 ```bash
-# Universal
 ./install.sh --target universal
-
-# OpenCode
 ./install.sh --target opencode
-
-# Claude
 ./install.sh --target claude
-
-# Current project
 ./install.sh --target project
-
-# Universal + OpenCode + Claude
 ./install.sh --target all
 ```
-
-Target paths:
 
 | Target | Path |
 |---|---|
@@ -71,95 +95,27 @@ Target paths:
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash -s -- update
 ```
 
-Existing installations are backed up before replacement by default.
-
 ## Install a tagged version / rollback
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | \
-  bash -s -- install --ref v2.8
+  bash -s -- install --ref v3.0
 ```
 
-You can also use a branch or commit SHA with `--ref`.
+## Documentation
 
-## Uninstall
+Complete v3.0 architecture and operating model:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | \
-  bash -s -- uninstall --target universal --yes
-```
-
-## Installer options
-
-```text
-install.sh [install|update|uninstall]
-
---target universal|opencode|claude|project|all
---ref <branch|tag|commit>
---yes
---static
---no-backup
---help
-```
-
-The installer requires `curl` and `tar` and does not require `sudo`. It writes to the selected skill location and, by default, keeps the previous installation in a timestamped sibling backup.
+[docs/MQL5-ENGINEERING-v3.0.md](docs/MQL5-ENGINEERING-v3.0.md)
 
 ## Releases
 
-Push a matching Git tag such as `v2.8` to trigger `.github/workflows/release.yml`. The workflow:
+Push a matching tag such as `v3.0` to trigger `.github/workflows/release.yml`.
 
-1. verifies that the tag matches `VERSION`, `mql5-engineering/SKILL.md`, and the activation banner;
-2. validates shell syntax;
-3. creates `mql5-engineering-v2.8.zip`;
-4. generates a SHA-256 checksum;
-5. publishes both files as a GitHub Release.
+## Safety
 
-## Repository layout
-
-```text
-mql5-Engineering/
-├── mql5-engineering/
-│   ├── SKILL.md
-│   ├── README.md
-│   ├── references/
-│   ├── workflows/
-│   ├── templates/
-│   └── scripts/
-├── .github/workflows/release.yml
-├── docs/INSTALLER-GITHUB.md
-├── install.sh
-├── uninstall.sh
-├── VERSION
-├── CHANGELOG.md
-├── LICENSE
-└── README.md
-```
-
-
-## Silent activation experience
-
-When activated, the skill keeps the startup UI intentionally minimal. It shows the retro green ASCII banner, an ANSI `Carregando...` animation, and then `Pronto para uso!`. It does not echo internal reference contents, file-loading lists, or routine discovery narration in assistant text. After the activation splash, the Interactive Planning Wizard asks exactly one question per turn, with lettered options (A, B, C...). No project discovery or project text is shown before the wizard is complete.
-
-## Workflow
-
-```text
-Interactive Planning Wizard
-   ↓
-Requirements summary
-   ↓
-Discovery
-   ↓
-Plan
-   ↓
-Approve
-   ↓
-Execute
-   ↓
-Validate
-   ↓
-Auditar
-   ↓
-Documentation update
-```
-
-The skill never treats successful compilation or backtesting as proof of profitability.
+- No live-money validation.
+- Compilation is not proof of trading correctness.
+- Backtests are not proof of profitability.
+- Audit findings require evidence.
+- A clean audit with an uninspected critical path is `LIMITED COVERAGE`.

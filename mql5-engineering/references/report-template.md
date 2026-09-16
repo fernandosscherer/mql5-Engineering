@@ -1,98 +1,64 @@
 # Audit report template
 
-Recommended target when the repository does not define another path: `docs/code-review.md`.
+Recommended default target: `docs/code-review.md`.
 
 ```markdown
-# Code Review — <Project>
+# MQL5 Engineering Audit — <Project>
 
 ## Executive Summary
+**Production readiness:** READY | CONDITIONAL | BLOCKED | LIMITED COVERAGE
 
-**Production readiness:** READY | CONDITIONAL | BLOCKED
+- CRITICAL:
+- HIGH:
+- MEDIUM:
+- LOW:
+- INFO:
 
 ## Scope
-
+## Audit Coverage
+## Project Profile
 ## Source-of-Truth Documents
-
 ## System / Behavior Map
-
-## Risk Summary
-
-| ID | Severity | Nature | Area | Summary |
-|---|---|---|---|---|
 
 ## Findings
 
-### CR-001 — <title>
-
+### AUD-001 — <title>
 - Severity:
 - Confidence:
 - Nature:
 - File/function/lines:
 - Technical reference:
-- Problem:
+- Invariant/assumption:
 - Evidence:
 - Failure scenario:
-- Operational/financial impact:
+- Impact:
 - Recommended correction:
-- Side effects / decision needed:
+- Verification performed:
 
-## Trading Logic Review
-
-## Financial Risk Review
-
-## Trade Execution / State Review
-
+## Code Correctness
+## Spec Compliance
+## Trading / Operational Logic
+## Trade Execution
+## State / Ownership
+## Financial Risk
 ## Indicator Correctness
-
-## Market / Instrument Portability
-
-## Tester / Backtest Reliability
-
-## Licensing / Security
-
+## Tester / Live Fidelity
+## Architecture
 ## Performance
-
-## UI / UX
-
+## UI / Operational Controls
+## Licensing / Security
 ## Documentation Consistency
-
-## Regulatory Flags
-
+## Regulatory / User-Claim Flags
 ## Compilation
-
-## Test Matrix
-
+## Validation / Test Matrix
 ## Open Decisions
-
 ## Remediation Roadmap
-
-### P0 — before real-money/production use
-### P1 — high priority
-### P2 — important improvement
-### P3 — future improvement
-
-## Final Scores
-
-- Code reliability: /10
-- Operational robustness: /10
-- Financial risk controls: /10
-- Trading logic clarity: /10
-- Architecture: /10
-- Performance: /10
-- UI/UX: /10
-- Documentation: /10
-
-## Top 5 Issues
+### P0
+### P1
+### P2
+### P3
 ```
 
-## Nature labels
+Do not produce numeric /10 scores.
 
-Use as applicable:
-
-- `CODE-INTERNAL DEFECT`
-- `CODE VS SPEC DEFECT`
-- `SPEC AMBIGUITY`
-- `ROBUSTNESS IMPROVEMENT`
-- `BUSINESS / STRATEGY DECISION`
-- `REGULATORY REVIEW REQUIRED`
-- `BROKER / ENVIRONMENT DEPENDENT`
+A clean result with an uninspected critical path is `LIMITED COVERAGE`, not `READY`.
