@@ -1,5 +1,9 @@
 # MQL5 Engineering
 
+<p align="center">
+  <img src="assets/mql5-engineering-banner.jpg" alt="MQL5 Engineering — Build, Improve, Debug, Audit" width="100%">
+</p>
+
 **Build • Improve • Debug • Audit**
 
 Production-oriented engineering skill for MQL5 Expert Advisors, indicators, libraries, panels, licensing, backend integration, testing, risk review, and documentation maintenance.
