@@ -1,7 +1,8 @@
 # MQL5 Engineering
 
 <p align="center">
-  <img src="assets/mql5-engineering-banner.svg" alt="MQL5 Engineering — Build, Improve, Debug, Audit" width="100%">
+![Uploading ChatGPT Image 16 de set. de 2026, 16_57_50.png…]()
+
 </p>
 
 **Build • Improve • Debug • Audit**
