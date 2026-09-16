@@ -1,9 +1,7 @@
 # MQL5 Engineering
 
-<p align="center">
 ![Uploading ChatGPT Image 16 de set. de 2026, 16_57_50.png…]()
 
-</p>
 
 **Build • Improve • Debug • Audit**
 
