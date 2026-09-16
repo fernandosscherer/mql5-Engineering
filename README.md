@@ -1,7 +1,7 @@
 # MQL5 Engineering
 
 <p align="center">
-  <img src="assets/mql5-engineering-banner.jpg" alt="MQL5 Engineering — Build, Improve, Debug, Audit" width="100%">
+  <img src="assets/mql5-engineering-banner.svg" alt="MQL5 Engineering — Build, Improve, Debug, Audit" width="100%">
 </p>
 
 **Build • Improve • Debug • Audit**
