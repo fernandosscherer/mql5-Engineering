@@ -2,7 +2,7 @@
 set -u
 
 VERSION="3.0"
-CREATED_BY="Fernando Scherer"
+CREATED_BY="FERNANDO SCHERER"
 REPOSITORY="https://github.com/fernandosscherer/mql5-Engineering.git"
 
 STATIC=0
@@ -19,11 +19,15 @@ if [[ "$supports_ansi" -eq 1 ]] && [[ -z "${NO_COLOR:-}" ]]; then
   GREEN_BRIGHT=$'\033[1;32m'
   GREEN=$'\033[0;32m'
   GREEN_DIM=$'\033[2;32m'
+  WHITE=$'\033[0;37m'
+  WHITE_BRIGHT=$'\033[1;37m'
   RESET=$'\033[0m'
 else
   GREEN_BRIGHT=""
   GREEN=""
   GREEN_DIM=""
+  WHITE=""
+  WHITE_BRIGHT=""
   RESET=""
 fi
 
@@ -62,17 +66,17 @@ print_banner() {
     fi
   done
 
-  printf '\n%s                     MQL5 Engineering v%s%s\n' "$GREEN_BRIGHT" "$VERSION" "$RESET"
+  printf '\n%s                     MQL5 Engineering v%s%s\n' "$WHITE_BRIGHT" "$VERSION" "$RESET"
   printf '%s             Discover → Route → Engineer → Validate → Audit%s\n' "$GREEN" "$RESET"
   printf '%s                  Facts → Agent | Decisions → User%s\n' "$GREEN_DIM" "$RESET"
-  printf '\n%sCreated by : %s%s\n' "$GREEN_DIM" "$CREATED_BY" "$RESET"
-  printf '%sRepository : %s%s\n\n' "$GREEN_DIM" "$REPOSITORY" "$RESET"
+  printf '\n%sCREATED BY :%s %s%s%s\n' "$GREEN_BRIGHT" "$RESET" "$WHITE_BRIGHT" "$CREATED_BY" "$RESET"
+  printf '%sGITHUB     :%s %s%s%s\n\n' "$GREEN_BRIGHT" "$RESET" "$WHITE" "$REPOSITORY" "$RESET"
 }
 
 loading_animation() {
   if [[ "$STATIC" -eq 1 ]] || [[ "$supports_ansi" -ne 1 ]]; then
     printf '%sCarregando...%s\n' "$GREEN" "$RESET"
-    printf '%sPronto para uso!%s\n\n' "$GREEN_BRIGHT" "$RESET"
+    printf '%sPronto para uso!%s\n\n' "$WHITE_BRIGHT" "$RESET"
     return
   fi
 
@@ -84,7 +88,7 @@ loading_animation() {
     sleep 0.15
   done
 
-  printf '\r\033[2K%sPronto para uso!%s\n\n' "$GREEN_BRIGHT" "$RESET"
+  printf '\r\033[2K%sPronto para uso!%s\n\n' "$WHITE_BRIGHT" "$RESET"
 }
 
 if [[ "$supports_ansi" -eq 1 ]] && [[ "$STATIC" -ne 1 ]]; then

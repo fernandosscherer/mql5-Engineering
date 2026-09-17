@@ -82,9 +82,29 @@ install.sh [install|update|uninstall]
 
 ## Terminal behavior
 
-The installer follows the same retro green terminal identity as the skill.
+The installer uses the final v3.0 retro **green + white** terminal identity.
 
-It shows:
+The hero is split into two aligned fixed-width panels:
+
+- left: large MQL5 ASCII mark, ENGINEERING, INSTALLER, and BUILD / IMPROVE / DEBUG / REVIEW / AUDIT modes;
+- right: `GLOBAL FINANCIAL MARKET` with a decorative aligned candlestick chart and `TREND / STRUCTURE` legend.
+
+Below the hero, a dedicated author block highlights:
+
+```text
+CREATED BY   FERNANDO SCHERER
+GITHUB       github.com/fernandosscherer/mql5-Engineering
+```
+
+Color rules:
+
+- green: borders, structural separators, status labels, progress and terminal accents;
+- white / bright white: MQL5 identity, market information, author name, repository URL and primary completion text;
+- black: terminal background supplied by the host terminal.
+
+The market chart is decorative and does not display live market data.
+
+The installer also shows:
 
 - installer version;
 - action;
@@ -95,7 +115,7 @@ It shows:
 - detected skill version;
 - destination;
 - backup path when replacing an installation;
-- final SYSTEM READY state.
+- final `SYSTEM READY` state.
 
 It honors:
 

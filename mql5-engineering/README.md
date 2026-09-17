@@ -42,12 +42,17 @@ Project-local:
 
 ## Activation
 
+The terminal identity uses retro green + white ANSI output. The author is shown as `FERNANDO SCHERER`, with green labels and bright-white identity text.
+
 ```text
 MQL5 ENGINEERING v3.0
 [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]
 
 Discover → Route → Engineer → Validate → Audit
 Facts → Agent | Decisions → User
+
+CREATED BY : FERNANDO SCHERER
+GITHUB     : https://github.com/fernandosscherer/mql5-Engineering.git
 
 Carregando...
 Pronto para uso!

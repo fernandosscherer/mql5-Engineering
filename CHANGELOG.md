@@ -18,6 +18,9 @@
 - Refined public README, installer UX, and terminal activation identity for v3.0.
 - Added installer `--version`, cleaner silent downloads, detected package-version display, and a final `SYSTEM READY` summary.
 - Added a candlestick market panel beside the large MQL5 ASCII logo in the installer terminal.
+- Finalized the installer hero as two aligned fixed-width panels with `GLOBAL FINANCIAL MARKET` and `TREND / STRUCTURE`.
+- Added a dedicated aligned author block highlighting `FERNANDO SCHERER` and the GitHub repository.
+- Restored the retro green + white terminal palette across installer and activation output.
 
 ## 2.8 — 2026-09-15
 
