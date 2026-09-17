@@ -75,11 +75,15 @@ if [[ "$supports_ansi" -eq 1 ]]; then
   G=$'\033[0;32m'
   GB=$'\033[1;32m'
   GD=$'\033[2;32m'
+  W=$'\033[0;37m'
+  WB=$'\033[1;37m'
   R=$'\033[0m'
 else
   G=""
   GB=""
   GD=""
+  W=""
+  WB=""
   R=""
 fi
 
@@ -91,37 +95,65 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 hero() {
-  local hero_lines=(
-'╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗'
-'║                                                                                                                    ║'
-'║   ███╗   ███╗ ██████╗ ██╗     ███████╗                       │  MARKET // EURUSD H1                                ║'
-'║   ████╗ ████║██╔═══██╗██║     ██╔════╝                       │                                                     ║'
-'║   ██╔████╔██║██║   ██║██║     ███████╗                       │  1.1060 ┤                                      │    ║'
-'║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                       │  1.1040 ┤                               │     █    ║'
-'║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                       │  1.1020 ┤                         │     █     │    ║'
-'║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                       │  1.1000 ┤                    │    █ │   █     ║'
-'║                                                              │  1.0980 ┤              │     █ │ █         ║'
-'║                 E N G I N E E R I N G                        │  1.0960 ┤         │    █ │  █              ║'
-'║                                                              │  1.0940 ┤    │    █ │  █                  ║'
-'║                         I N S T A L L E R                    │  1.0920 ┤    █ │  █                       ║'
-'║                                                              │  1.0900 ┼─│──█─│──────────────────────── ║'
-'║      [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]     │             ↑ trend / structure           ║'
-'║                                                               │                                                     ║'
-'╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝'
+  local left_lines=(
+'                                                             '
+'   ███╗   ███╗ ██████╗ ██╗     ███████╗                      '
+'   ████╗ ████║██╔═══██╗██║     ██╔════╝                      '
+'   ██╔████╔██║██║   ██║██║     ███████╗                      '
+'   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                      '
+'   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                      '
+'   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                      '
+'                                                             '
+'                 E N G I N E E R I N G                       '
+'                                                             '
+'                    I N S T A L L E R                        '
+'                                                             '
+'   [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]      '
+'                                                             '
   )
 
-  local line
-  printf '\n'
-  for line in "${hero_lines[@]}"; do
-    printf '%s%s%s\n' "$GB" "$line" "$R"
+  local right_lines=(
+'                                                      '
+'  GLOBAL FINANCIAL MARKET                             '
+'                                                      '
+'  1.1060 ┤                                    │       '
+'  1.1040 ┤                               │    █       '
+'  1.1020 ┤                          │    █    │       '
+'  1.1000 ┤                     │    █ │  █            '
+'  1.0980 ┤                │    █ │ █                  '
+'  1.0960 ┤           │    █ │  █                      '
+'  1.0940 ┤      │    █ │  █                           '
+'  1.0920 ┤   │  █ │  █                                '
+'  1.0900 ┼───┴──┴─┴────────────────────────           '
+'           ↑ TREND / STRUCTURE                        '
+'                                                      '
+  )
+
+  printf '\n%s╔═════════════════════════════════════════════════════════════╦══════════════════════════════════════════════════════╗%s\n' "$G" "$R"
+
+  local i
+  for i in "${!left_lines[@]}"; do
+    if [[ "$i" -eq 1 || "$i" -eq 2 || "$i" -eq 3 || "$i" -eq 4 || "$i" -eq 5 || "$i" -eq 6 || "$i" -eq 8 || "$i" -eq 10 || "$i" -eq 12 ]]; then
+      printf '%s║%s%s%s%s║%s%s%s%s║%s\n' "$G" "$WB" "${left_lines[$i]}" "$R" "$G" "$WB" "${right_lines[$i]}" "$R" "$G" "$R"
+    else
+      printf '%s║%s%s%s%s║%s%s%s%s║%s\n' "$G" "$W" "${left_lines[$i]}" "$R" "$G" "$W" "${right_lines[$i]}" "$R" "$G" "$R"
+    fi
+
     if [[ "$STATIC" -eq 0 && -t 1 ]]; then
       sleep 0.008
     fi
   done
 
-  printf '\n%s                     MQL5 Engineering v%s%s\n' "$GB" "$INSTALLER_VERSION" "$R"
-  printf '%s             Discover → Route → Engineer → Validate → Audit%s\n' "$G" "$R"
-  printf '%s                  Facts → Agent | Decisions → User%s\n' "$GD" "$R"
+  printf '%s╚═════════════════════════════════════════════════════════════╩══════════════════════════════════════════════════════╝%s\n' "$G" "$R"
+
+  printf '\n%s╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n' "$G" "$R"
+  printf '%s║%s  CREATED BY   %sFERNANDO SCHERER%s                                                                                     %s║%s\n' "$G" "$GB" "$WB" "$R" "$G" "$R"
+  printf '%s║%s  GITHUB       %sgithub.com/fernandosscherer/mql5-Engineering%s                                                         %s║%s\n' "$G" "$GB" "$W" "$R" "$G" "$R"
+  printf '%s╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝%s\n' "$G" "$R"
+
+  printf '\n%s                                      MQL5 Engineering v%s%s\n' "$WB" "$INSTALLER_VERSION" "$R"
+  printf '%s                           Discover → Route → Engineer → Validate → Audit%s\n' "$G" "$R"
+  printf '%s                                Facts → Agent | Decisions → User%s\n' "$GD" "$R"
   printf '\n%sRepository :%s https://github.com/%s\n' "$GD" "$R" "$REPO_SLUG"
   printf '%sAction     :%s %s\n' "$GD" "$R" "$ACTION"
   printf '%sTarget     :%s %s\n' "$GD" "$R" "$TARGET"
@@ -303,12 +335,12 @@ done < <(resolve_targets)
 
 status "Permissions"
 
-printf '\n%s╔════════════════════════════════════════════════════════════════════╗%s\n' "$GB" "$R"
-printf '%s║                         SYSTEM READY                               ║%s\n' "$GB" "$R"
-printf '%s╚════════════════════════════════════════════════════════════════════╝%s\n' "$GB" "$R"
+printf '\n%s╔════════════════════════════════════════════════════════════════════╗%s\n' "$G" "$R"
+printf '%s║%s                         SYSTEM READY                               %s║%s\n' "$G" "$WB" "$G" "$R"
+printf '%s╚════════════════════════════════════════════════════════════════════╝%s\n' "$G" "$R"
 printf '%sSkill   :%s %s%s%s\n' "$GD" "$R" "$SKILL_NAME" "${package_version:+ v}" "$package_version"
 printf '%sAction  :%s %s\n' "$GD" "$R" "$ACTION"
 printf '%sTarget  :%s %s\n' "$GD" "$R" "$TARGET"
 printf '%sRef     :%s %s\n' "$GD" "$R" "$REF"
 printf '\nRestart your AI agent/session and activate with:\n\n'
-printf '  %sUse the mql5-engineering skill.%s\n\n' "$GB" "$R"
+printf '  %sUse the mql5-engineering skill.%s\n\n' "$WB" "$R"
