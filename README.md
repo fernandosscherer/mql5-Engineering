@@ -173,6 +173,9 @@ The project deliberately does **not** use artificial `/10` quality scores.
 
 ---
 
+<img width="841" height="544" alt="install-mql5-Engineering" src="https://github.com/user-attachments/assets/809de0cb-0b1c-4755-9bff-9094b3cf4566" />
+
+
 ## Quick install
 
 Recommended universal installation:
