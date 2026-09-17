@@ -267,33 +267,39 @@ Existing installations are backed up before replacement unless `--no-backup` is 
 
 ## Terminal experience
 
-The installer and activation experience use a monochrome retro-green terminal identity. The installer now combines the large MQL5 ASCII mark with a compact candlestick market panel.
+The installer uses a retro **green + white** terminal identity. Borders, status accents and structural elements are green; primary labels, the MQL5 mark, the market panel and author identity use white/bright-white highlights.
 
 ```text
+╔═════════════════════════════════════════════════════════════╦══════════════════════════════════════════════════════╗
+║                                                             ║                                                      ║
+║   ███╗   ███╗ ██████╗ ██╗     ███████╗                      ║  GLOBAL FINANCIAL MARKET                             ║
+║   ████╗ ████║██╔═══██╗██║     ██╔════╝                      ║                                                      ║
+║   ██╔████╔██║██║   ██║██║     ███████╗                      ║  1.1060 ┤                                    │       ║
+║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                      ║  1.1040 ┤                               │    █       ║
+║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                      ║  1.1020 ┤                          │    █    │       ║
+║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                      ║  1.1000 ┤                     │    █ │  █            ║
+║                                                             ║  1.0980 ┤                │    █ │ █                  ║
+║                 E N G I N E E R I N G                       ║  1.0960 ┤           │    █ │  █                      ║
+║                                                             ║  1.0940 ┤      │    █ │  █                           ║
+║                    I N S T A L L E R                        ║  1.0920 ┤   │  █ │  █                                ║
+║                                                             ║  1.0900 ┼───┴──┴─┴────────────────────────           ║
+║   [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]      ║           ↑ TREND / STRUCTURE                        ║
+║                                                             ║                                                      ║
+╚═════════════════════════════════════════════════════════════╩══════════════════════════════════════════════════════╝
+
 ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                                                    ║
-║   ███╗   ███╗ ██████╗ ██╗     ███████╗                       │  MARKET // EURUSD H1                                ║
-║   ████╗ ████║██╔═══██╗██║     ██╔════╝                       │                                                     ║
-║   ██╔████╔██║██║   ██║██║     ███████╗                       │  1.1060 ┤                                      │    ║
-║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                       │  1.1040 ┤                               │     █    ║
-║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                       │  1.1020 ┤                         │     █     │    ║
-║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                       │  1.1000 ┤                    │    █ │   █     ║
-║                                                               │  1.0980 ┤              │     █ │ █         ║
-║                 E N G I N E E R I N G                         │  1.0960 ┤         │    █ │  █              ║
-║                                                               │  1.0940 ┤    │    █ │  █                  ║
-║                         I N S T A L L E R                      │  1.0920 ┤    █ │  █                       ║
-║                                                               │  1.0900 ┼─│──█─│──────────────────────── ║
-║      [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]     │             ↑ trend / structure           ║
+║  CREATED BY   FERNANDO SCHERER                                                                                     ║
+║  GITHUB       github.com/fernandosscherer/mql5-Engineering                                                         ║
 ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-                     MQL5 Engineering v3.0
-             Discover → Route → Engineer → Validate → Audit
-                  Facts → Agent | Decisions → User
+                                      MQL5 Engineering v3.0
+                           Discover → Route → Engineer → Validate → Audit
+                                Facts → Agent | Decisions → User
 ```
 
-The candlestick panel is decorative terminal art only; it does not display live market data.
+The market chart is decorative terminal art only; it does not display live market data.
 
-ANSI output uses bright, normal, and dim green only. `NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` are supported.
+`NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` are supported.
 
 ---
 
