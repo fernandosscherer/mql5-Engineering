@@ -1,6 +1,6 @@
 ---
 name: mql5-engineering
-description: Engineering router for production-grade MQL5 work. Routes explicit requests to BUILD, IMPROVE, DEBUG, REVIEW, or AUDIT, discovers repository facts before asking questions, and coordinates specialized MQL5 review passes for code correctness, strategy logic, execution, state, financial risk, indicators, tester fidelity, architecture, performance, UI, licensing, documentation, and spec compliance.
+description: Plan, build, improve, debug, review, and audit production-grade MQL5 Expert Advisors, indicators, libraries, and trading systems on MetaTrader 5. Uses a discovery-first engineering router, approval-gated execution, official MQL5 documentation as primary authority, and independent specialized audit passes covering code correctness, trading logic, execution, financial risk, state, indicators, tester fidelity, architecture, performance, UI, licensing, documentation, and spec compliance. Market-agnostic: B3, Forex, metals (XAUUSD), CFDs, indices, and other MT5 instruments.
 license: MIT
 compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
