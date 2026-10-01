@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.0"
+VERSION="3.0.1"
 CREATED_BY="FERNANDO SCHERER"
 REPOSITORY="https://github.com/fernandosscherer/mql5-Engineering.git"
 

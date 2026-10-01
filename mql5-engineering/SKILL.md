@@ -6,7 +6,7 @@ compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
   audience: mql5-developers
   workflow: engineering-router
-  version: "3.0"
+  version: "3.0.1"
   author: "Fernando Scherer"
   repository: "https://github.com/fernandosscherer/mql5-Engineering.git"
 ---

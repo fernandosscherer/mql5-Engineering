@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 PROGRAM="MQL5 Engineering Installer"
-INSTALLER_VERSION="3.0"
+INSTALLER_VERSION="3.0.1"
 REPO_SLUG="fernandosscherer/mql5-Engineering"
 DEFAULT_REF="main"
 SKILL_NAME="mql5-engineering"
