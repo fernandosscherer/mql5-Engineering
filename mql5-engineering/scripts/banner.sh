@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -u
+set -euo pipefail
 
 VERSION="3.0"
 CREATED_BY="FERNANDO SCHERER"

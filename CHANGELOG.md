@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.1 — 2026-10-01
+
+- Fixed `scripts/banner.sh`: replaced `set -u` with `set -euo pipefail`, matching `inspect-mql5.sh` and preventing silent errors.
+- Added `.gitattributes` to enforce LF line endings across all text and shell files.
+- Added `CONTRIBUTING.md` with file structure, naming conventions, release process, and shell script standards.
+- Added `references/error-handling.md` covering terminal errors vs. trade-server retcodes, `GetLastError`/`ResetLastError` discipline, `OrderSend` retcode handling, retry logic, indicator handles, file I/O, `WebRequest`, and logging standards.
+- Expanded `references/ui-design.md` with chart object management (naming, create/delete lifecycle), `OnChartEvent` safety, `CDialog`/`CPanel` usage, `ChartRedraw` discipline, and indicator buffer visualization.
+- Updated `auditors/code.md` to reference `references/error-handling.md` explicitly.
+- Updated `auditors/ui.md` to reference `references/ui-design.md` and list chart-object and `OnChartEvent` checks.
+
 ## 3.0 — 2026-09-16
 
 - Rebuilt MQL5 Engineering around an intelligent engineering router.
