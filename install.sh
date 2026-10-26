@@ -15,8 +15,8 @@ STATIC=0
 KEEP_BACKUP=1
 
 usage() {
-  cat <<'USAGE'
-MQL5 Engineering Installer v3.0
+  cat <<USAGE
+MQL5 Engineering Installer v${INSTALLER_VERSION}
 
 Usage:
   install.sh [install|update|uninstall] [options]
@@ -247,6 +247,11 @@ install_to() {
       backup="${dest}.backup.$(date +%Y%m%d%H%M%S).$$"
       mv "$dest" "$backup"
       printf '%s[BACKUP]%s %s\n' "$GD" "$R" "$backup"
+      local old_backups
+      old_backups="$(ls -td "${dest}".backup.* 2>/dev/null | tail -n +4 || true)"
+      if [[ -n "$old_backups" ]]; then
+        printf '%s\n' "$old_backups" | xargs rm -rf 2>/dev/null || true
+      fi
     else
       rm -rf "$dest"
     fi

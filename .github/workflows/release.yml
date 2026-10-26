@@ -23,9 +23,11 @@ jobs:
           SKILL_VERSION="$(awk '/^[[:space:]]*version:[[:space:]]*/ {gsub(/["[:space:]]/, "", $2); print $2; exit}' mql5-engineering/SKILL.md)"
           ROOT_VERSION="$(tr -d '[:space:]' < VERSION)"
           BANNER_VERSION="$(sed -n 's/^VERSION="\([^"]*\)"/\1/p' mql5-engineering/scripts/banner.sh | head -1)"
+          INSTALLER_VERSION="$(sed -n 's/^INSTALLER_VERSION="\([^"]*\)"/\1/p' install.sh | head -1)"
           test "$TAG" = "$SKILL_VERSION"
           test "$TAG" = "$ROOT_VERSION"
           test "$TAG" = "$BANNER_VERSION"
+          test "$TAG" = "$INSTALLER_VERSION"
 
       - name: Validate required v3 structure
         shell: bash
@@ -37,6 +39,7 @@ jobs:
           test -f mql5-engineering/auditors/spec-compliance.md
           test -f mql5-engineering/engineering/codebase-design.md
           test -f mql5-engineering/engineering/evidence.md
+          test -f mql5-engineering/references/error-handling.md
 
       - name: Validate shell scripts
         shell: bash

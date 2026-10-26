@@ -71,7 +71,7 @@ deactivated_at
 
 Prefer storing a one-way hash of license keys when plaintext recovery is not required.
 
-## Wizard questions
+## Licensing planning questions
 
 If licensing applies, ask only unresolved items:
 

@@ -4,7 +4,7 @@ Documentation is part of the definition of done.
 
 ## Planning question
 
-The start questionnaire asks whether the user wants:
+During planning, determine whether the task requires:
 
 - a dedicated task/project document;
 - only existing documentation updated;

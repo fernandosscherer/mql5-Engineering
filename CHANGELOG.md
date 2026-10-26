@@ -2,6 +2,12 @@
 
 ## 3.0.1 — 2026-10-01
 
+- Synchronized version string across all documentation and scripts (`install.sh`, `README.md`, `mql5-engineering/README.md`, `docs/MQL5-ENGINEERING-v3.0.md`, `CONTRIBUTING.md`).
+- Made `install.sh` usage help dynamically display `INSTALLER_VERSION`.
+- Added automatic backup pruning in `install.sh` to retain the 3 most recent backups.
+- Updated `.github/workflows/release.yml` to validate `INSTALLER_VERSION` and `references/error-handling.md`.
+- Removed residual v2 terminology ("questionnaire", "wizard") in `documentation-protocol.md` and `licensing-backend.md`.
+- Added explicit reference citations across all auditor briefs in `mql5-engineering/auditors/`.
 - Fixed `scripts/banner.sh`: replaced `set -u` with `set -euo pipefail`, matching `inspect-mql5.sh` and preventing silent errors.
 - Added `.gitattributes` to enforce LF line endings across all text and shell files.
 - Added `CONTRIBUTING.md` with file structure, naming conventions, release process, and shell script standards.

@@ -1,4 +1,4 @@
-# mql5-engineering v3.0 — Agent Skill
+# mql5-engineering v3.0.1 — Agent Skill
 
 Reusable engineering system for production-oriented MQL5 work.
 
@@ -45,7 +45,7 @@ Project-local:
 The terminal identity uses retro green + white ANSI output. The author is shown as `FERNANDO SCHERER`, with green labels and bright-white identity text.
 
 ```text
-MQL5 ENGINEERING v3.0
+MQL5 ENGINEERING v3.0.1
 [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]
 
 Discover → Route → Engineer → Validate → Audit

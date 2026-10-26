@@ -4,7 +4,7 @@
 
 **Autor:** Fernando Scherer  
 **Repositório:** https://github.com/fernandosscherer/mql5-Engineering  
-**Versão:** 3.0
+**Versão:** 3.0.1
 
 ---
 

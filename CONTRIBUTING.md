@@ -40,18 +40,19 @@ VERSION         ← Single source of version number (e.g. "3.0")
 
 ### Versioning
 
-This project uses a **simple major.minor** version scheme (e.g. `3.0`, `3.1`, `4.0`).
+This project uses a semantic version scheme (`major.minor` or `major.minor.patch`, e.g. `3.0`, `3.0.1`, `3.1`).
 
-Before releasing, these four sources must all contain the **same** version string:
+Before releasing, these canonical sources must all contain the **same** version string:
 
 | Source | Location |
 |--------|----------|
 | `VERSION` | Root file, plain text, single line |
 | `SKILL.md` metadata | `version:` field in YAML frontmatter |
-| `scripts/banner.sh` | `VERSION="x.y"` variable |
-| Git tag | `vX.Y` (e.g. `v3.0`) |
+| `scripts/banner.sh` | `VERSION="x.y.z"` variable |
+| `install.sh` | `INSTALLER_VERSION="x.y.z"` variable |
+| Git tag | `vX.Y[.Z]` (e.g. `v3.0.1`) |
 
-The CI workflow (`release.yml`) validates all four before building the release package.
+The CI workflow (`release.yml`) validates all sources before building the release package.
 
 ### Markdown style
 

@@ -6,7 +6,7 @@
 
 Production-oriented engineering system for **MetaTrader 5 / MQL5**. Designed for Expert Advisors, indicators, libraries, panels, trading execution, financial-risk logic, Strategy Tester workflows, licensing, backend integrations, code review, and production audits.
 
-**Version:** 3.0  
+**Version:** 3.0.1  
 **Created by:** Fernando Scherer  
 **Repository:** https://github.com/fernandosscherer/mql5-Engineering
 
@@ -295,7 +295,7 @@ The installer uses a retro **green + white** terminal identity. Borders, status 
 ║  GITHUB       github.com/fernandosscherer/mql5-Engineering                                                         ║
 ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-                                      MQL5 Engineering v3.0
+                                      MQL5 Engineering v3.0.1
                            Discover → Route → Engineer → Validate → Audit
                                 Facts → Agent | Decisions → User
 ```
