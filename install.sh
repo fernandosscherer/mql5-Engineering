@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 PROGRAM="MQL5 Engineering Installer"
-INSTALLER_VERSION="3.0.1"
+INSTALLER_VERSION="3.1.0"
 REPO_SLUG="fernandosscherer/mql5-Engineering"
 DEFAULT_REF="main"
 SKILL_NAME="mql5-engineering"
@@ -42,7 +42,7 @@ Examples:
   ./install.sh
   ./install.sh update
   ./install.sh install --target opencode
-  ./install.sh install --target project --ref v3.0
+  ./install.sh install --target project --ref v3.1
   ./install.sh uninstall --target universal --yes
 USAGE
 }
@@ -109,7 +109,7 @@ hero() {
 '                    I N S T A L L E R                        '
 '                                                             '
 '   [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]      '
-'                                                             '
+'                    [ RELEASE ]                              '
   )
 
   local right_lines=(
@@ -130,29 +130,24 @@ hero() {
   )
 
   printf '\n%s╔═════════════════════════════════════════════════════════════╦══════════════════════════════════════════════════════╗%s\n' "$G" "$R"
-
   local i
   for i in "${!left_lines[@]}"; do
-    if [[ "$i" -eq 1 || "$i" -eq 2 || "$i" -eq 3 || "$i" -eq 4 || "$i" -eq 5 || "$i" -eq 6 || "$i" -eq 8 || "$i" -eq 10 || "$i" -eq 12 ]]; then
+    if [[ "$i" -eq 1 || "$i" -eq 2 || "$i" -eq 3 || "$i" -eq 4 || "$i" -eq 5 || "$i" -eq 6 || "$i" -eq 8 || "$i" -eq 10 || "$i" -eq 12 || "$i" -eq 13 ]]; then
       printf '%s║%s%s%s%s║%s%s%s%s║%s\n' "$G" "$WB" "${left_lines[$i]}" "$R" "$G" "$WB" "${right_lines[$i]}" "$R" "$G" "$R"
     else
       printf '%s║%s%s%s%s║%s%s%s%s║%s\n' "$G" "$W" "${left_lines[$i]}" "$R" "$G" "$W" "${right_lines[$i]}" "$R" "$G" "$R"
     fi
-
-    if [[ "$STATIC" -eq 0 && -t 1 ]]; then
-      sleep 0.008
-    fi
+    if [[ "$STATIC" -eq 0 && -t 1 ]]; then sleep 0.008; fi
   done
 
   printf '%s╚═════════════════════════════════════════════════════════════╩══════════════════════════════════════════════════════╝%s\n' "$G" "$R"
-
   printf '\n%s╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n' "$G" "$R"
   printf '%s║%s  CREATED BY   %sFERNANDO SCHERER%s                                                                                     %s║%s\n' "$G" "$GB" "$WB" "$R" "$G" "$R"
   printf '%s║%s  GITHUB       %sgithub.com/fernandosscherer/mql5-Engineering%s                                                         %s║%s\n' "$G" "$GB" "$W" "$R" "$G" "$R"
   printf '%s╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝%s\n' "$G" "$R"
 
   printf '\n%s                                      MQL5 Engineering v%s%s\n' "$WB" "$INSTALLER_VERSION" "$R"
-  printf '%s                           Discover → Route → Engineer → Validate → Audit%s\n' "$G" "$R"
+  printf '%s                       Discover → Route → Engineer → Validate → Audit → Release%s\n' "$G" "$R"
   printf '%s                                Facts → Agent | Decisions → User%s\n' "$GD" "$R"
   printf '\n%sRepository :%s https://github.com/%s\n' "$GD" "$R" "$REPO_SLUG"
   printf '%sAction     :%s %s\n' "$GD" "$R" "$ACTION"
@@ -171,18 +166,9 @@ status() {
   fi
 }
 
-info() {
-  printf '%s[INFO]%s %s\n' "$GD" "$R" "$1"
-}
-
-fail() {
-  printf '%s[FAIL]%s %s\n' "$GB" "$R" "$1" >&2
-  exit 1
-}
-
-need_cmd() {
-  command -v "$1" >/dev/null 2>&1 || fail "Required command not found: $1"
-}
+info() { printf '%s[INFO]%s %s\n' "$GD" "$R" "$1"; }
+fail() { printf '%s[FAIL]%s %s\n' "$GB" "$R" "$1" >&2; exit 1; }
+need_cmd() { command -v "$1" >/dev/null 2>&1 || fail "Required command not found: $1"; }
 
 confirm() {
   local prompt="$1"
@@ -213,17 +199,8 @@ resolve_targets() {
 
 remove_target() {
   local dest="$1"
-
-  if [[ ! -e "$dest" ]]; then
-    info "Not installed: $dest"
-    return 0
-  fi
-
-  if [[ "$ASSUME_YES" -ne 1 ]] && ! confirm "Remove $dest?"; then
-    info "Skipped: $dest"
-    return 0
-  fi
-
+  if [[ ! -e "$dest" ]]; then info "Not installed: $dest"; return 0; fi
+  if [[ "$ASSUME_YES" -ne 1 ]] && ! confirm "Remove $dest?"; then info "Skipped: $dest"; return 0; fi
   rm -rf "$dest"
   printf '%s[REMOVED]%s %s\n' "$GB" "$R" "$dest"
 }
@@ -237,21 +214,15 @@ install_to() {
 
   if [[ -e "$dest" ]]; then
     if [[ "$ACTION" == "install" && "$ASSUME_YES" -ne 1 ]]; then
-      if ! confirm "Existing installation found at $dest. Replace it?"; then
-        info "Skipped: $dest"
-        return 0
-      fi
+      if ! confirm "Existing installation found at $dest. Replace it?"; then info "Skipped: $dest"; return 0; fi
     fi
-
     if [[ "$KEEP_BACKUP" -eq 1 ]]; then
       backup="${dest}.backup.$(date +%Y%m%d%H%M%S).$$"
       mv "$dest" "$backup"
       printf '%s[BACKUP]%s %s\n' "$GD" "$R" "$backup"
       local old_backups
       old_backups="$(ls -td "${dest}".backup.* 2>/dev/null | tail -n +4 || true)"
-      if [[ -n "$old_backups" ]]; then
-        printf '%s\n' "$old_backups" | xargs rm -rf 2>/dev/null || true
-      fi
+      if [[ -n "$old_backups" ]]; then printf '%s\n' "$old_backups" | xargs rm -rf 2>/dev/null || true; fi
     else
       rm -rf "$dest"
     fi
@@ -264,7 +235,6 @@ install_to() {
   fi
 
   find "$dest/scripts" -type f -name '*.sh' -exec chmod +x {} + 2>/dev/null || true
-
   if [[ ! -f "$dest/SKILL.md" ]]; then
     rm -rf "$dest"
     if [[ -n "$backup" && -d "$backup" ]]; then mv "$backup" "$dest"; fi
@@ -273,7 +243,6 @@ install_to() {
 
   local installed_version
   installed_version="$(awk '/^[[:space:]]*version:[[:space:]]*/ {gsub(/["[:space:]]/, "", $2); print $2; exit}' "$dest/SKILL.md" || true)"
-
   printf '%s[INSTALLED]%s %s%s%s\n' "$GB" "$R" "$dest" "${installed_version:+  v}" "$installed_version"
 }
 
@@ -295,7 +264,6 @@ source_dir=""
 
 if [[ -n "${MQL5_ENGINEERING_SOURCE_DIR:-}" ]]; then
   candidate="${MQL5_ENGINEERING_SOURCE_DIR%/}/$SKILL_NAME"
-
   if [[ -f "$candidate/SKILL.md" ]]; then
     source_dir="$candidate"
   elif [[ -f "${MQL5_ENGINEERING_SOURCE_DIR%/}/SKILL.md" ]]; then
@@ -303,41 +271,24 @@ if [[ -n "${MQL5_ENGINEERING_SOURCE_DIR:-}" ]]; then
   else
     fail "MQL5_ENGINEERING_SOURCE_DIR does not contain $SKILL_NAME/SKILL.md"
   fi
-
   status "Local source"
 else
   archive="$cleanup_tmp/repo.tar.gz"
   url="https://codeload.github.com/$REPO_SLUG/tar.gz/$REF"
-
   info "Fetching $REPO_SLUG @ $REF"
-
-  curl --fail --silent --show-error --location \
-    --retry 3 --connect-timeout 15 --max-time 120 \
-    "$url" -o "$archive"
-
+  curl --fail --silent --show-error --location --retry 3 --connect-timeout 15 --max-time 120 "$url" -o "$archive"
   status "Repository download"
-
   mkdir -p "$cleanup_tmp/extract"
   tar -xzf "$archive" -C "$cleanup_tmp/extract"
-
   skill_file="$(find "$cleanup_tmp/extract" -type f -path "*/$SKILL_NAME/SKILL.md" -print -quit)"
-
-  if [[ -n "$skill_file" ]]; then
-    source_dir="$(dirname "$skill_file")"
-  fi
-
+  if [[ -n "$skill_file" ]]; then source_dir="$(dirname "$skill_file")"; fi
   [[ -n "$source_dir" && -f "$source_dir/SKILL.md" ]] || fail "Could not locate $SKILL_NAME/SKILL.md in ref $REF"
-
   status "Package validation"
 fi
 
 package_version="$(awk '/^[[:space:]]*version:[[:space:]]*/ {gsub(/["[:space:]]/, "", $2); print $2; exit}' "$source_dir/SKILL.md" || true)"
 info "Package version: ${package_version:-unknown}"
-
-while IFS= read -r dest; do
-  install_to "$source_dir" "$dest"
-done < <(resolve_targets)
-
+while IFS= read -r dest; do install_to "$source_dir" "$dest"; done < <(resolve_targets)
 status "Permissions"
 
 printf '\n%s╔════════════════════════════════════════════════════════════════════╗%s\n' "$G" "$R"

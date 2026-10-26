@@ -29,25 +29,35 @@ jobs:
           test "$TAG" = "$BANNER_VERSION"
           test "$TAG" = "$INSTALLER_VERSION"
 
-      - name: Validate required v3 structure
+      - name: Validate required v3.1 structure
         shell: bash
         run: |
           set -euo pipefail
-          test -f mql5-engineering/workflows/review.md
-          test -f mql5-engineering/auditors/code.md
+          test -f mql5-engineering/workflows/release.md
           test -f mql5-engineering/auditors/risk.md
-          test -f mql5-engineering/auditors/spec-compliance.md
-          test -f mql5-engineering/engineering/codebase-design.md
+          test -f mql5-engineering/auditors/trade-execution.md
+          test -f mql5-engineering/auditors/state.md
+          test -f mql5-engineering/auditors/mql5-market.md
+          test -f mql5-engineering/auditors/economic-calendar.md
+          test -f mql5-engineering/auditors/time-session.md
+          test -f mql5-engineering/invariants/execution.md
+          test -f mql5-engineering/invariants/financial-risk.md
+          test -f mql5-engineering/scenarios/market-validation.md
+          test -f mql5-engineering/references/broker-compatibility.md
+          test -f mql5-engineering/references/time-semantics.md
           test -f mql5-engineering/engineering/evidence.md
           test -f mql5-engineering/references/error-handling.md
+          test -f mql5-engineering/templates/release-report.md
 
-      - name: Validate shell scripts
+      - name: Validate scripts
         shell: bash
         run: |
           set -euo pipefail
           bash -n install.sh
           bash -n uninstall.sh
           find mql5-engineering/scripts -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
+          python3 -m py_compile mql5-engineering/scripts/verify-risk-formula.py
+          python3 -m py_compile mql5-engineering/scripts/verify-volume-normalization.py
 
       - name: Build release package
         shell: bash

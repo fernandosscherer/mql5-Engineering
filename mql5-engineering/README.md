@@ -1,14 +1,24 @@
-# mql5-engineering v3.0.1 — Agent Skill
+# mql5-engineering v3.1.0 — Agent Skill
 
 Reusable engineering system for production-oriented MQL5 work.
 
-**Modes:** BUILD • IMPROVE • DEBUG • REVIEW • AUDIT
+**Modes:** BUILD • IMPROVE • DEBUG • REVIEW • AUDIT • RELEASE
 
 ## Core principle
 
 > **Facts are the agent's job. Decisions are the user's job.**
 
-v3.0 performs repository discovery before asking questions whenever possible. It routes the request into the narrowest workflow and loads only the applicable engineering/audit modules.
+v3.1 performs repository discovery before questions, routes into the narrowest workflow, and uses specialized auditors, engineering invariants, adversarial scenarios, broker-compatibility reasoning, and explicit validation coverage.
+
+## What changed in v3.1
+
+- RELEASE readiness workflow for delivery and MQL5 Market submission.
+- Engineering invariants for execution, financial risk, position ownership, state lifecycle, and indicators.
+- Stable adversarial scenario packs for execution, risk, state, tester, market validation, and XAUUSD.
+- Deeper auditors for risk, execution, state, tester, time/session, Economic Calendar, and MQL5 Market readiness.
+- Broker Compatibility Matrix and time-semantics guidance.
+- Structured evidence schema and validation-level vocabulary.
+- Triage scripts for trade calls, ownership, indicator handles, risk formulas, and volume normalization.
 
 ## Installation
 
@@ -16,86 +26,36 @@ v3.0 performs repository discovery before asking questions whenever possible. It
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash
 ```
 
-Default:
+Default target: `~/.agents/skills/mql5-engineering`.
 
-```text
-~/.agents/skills/mql5-engineering
-```
-
-OpenCode:
+Other targets:
 
 ```bash
 ./install.sh --target opencode
-```
-
-Claude:
-
-```bash
 ./install.sh --target claude
-```
-
-Project-local:
-
-```bash
 ./install.sh --target project
 ```
 
 ## Activation
 
-The terminal identity uses retro green + white ANSI output. The author is shown as `FERNANDO SCHERER`, with green labels and bright-white identity text.
-
 ```text
-MQL5 ENGINEERING v3.0.1
-[ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]
+MQL5 ENGINEERING v3.1.0
+[ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ] [ RELEASE ]
 
-Discover → Route → Engineer → Validate → Audit
+Discover → Route → Engineer → Validate → Audit → Release
 Facts → Agent | Decisions → User
-
-CREATED BY : FERNANDO SCHERER
-GITHUB     : https://github.com/fernandosscherer/mql5-Engineering.git
-
-Carregando...
-Pronto para uso!
 ```
-
-Activation does not echo internal references, file-loading lists, or discovery narration.
 
 ## Audit
 
-A full audit automatically determines which technical domains apply.
-
-Core EA passes:
-
-- code;
-- spec compliance;
-- trading logic;
-- trade execution;
-- state/ownership;
-- financial risk;
-- architecture.
-
-Optional passes:
-
-- indicators;
-- Strategy Tester;
-- performance;
-- UI;
-- licensing/backend/security;
-- documentation;
-- regulatory flags.
+A full audit automatically determines which technical domains apply. Core EA passes cover code, spec compliance, trading logic, execution, state/ownership, financial risk, and architecture. Applicable optional passes cover indicators, tester fidelity, time/session, Economic Calendar, performance, UI, licensing/backend/security, documentation, regulatory flags, and MQL5 Market readiness.
 
 If critical-path coverage is incomplete, the result is `LIMITED COVERAGE`, not `READY`.
 
-## Documentation
+## Release
 
-Complete architecture guide:
+RELEASE is a read-only readiness assessment. It evaluates the fixed point, compile/test evidence, critical paths, broker/account compatibility, tester behavior, risk controls, operational resilience, documentation consistency, and MQL5 Market validation risk when applicable.
 
-```text
-docs/MQL5-ENGINEERING-v3.0.md
-```
+Verdicts: `READY`, `CONDITIONAL`, `BLOCKED`, or `LIMITED COVERAGE`.
 
-## Tagged install
-
-```bash
-./install.sh install --ref v3.0
-```
+Release readiness never implies profitability.

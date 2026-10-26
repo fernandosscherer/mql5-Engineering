@@ -1,5 +1,17 @@
 # Trading logic auditor
 
-Reconstruct: Signal -> filters -> permission -> sizing -> entry -> management -> exit -> reset. Check precedence, current/closed bar semantics, duplicate signals, contradictory conditions, unreachable states, cutoff/session behavior, daily reset, protection interactions, and restart effects. Use concrete edge scenarios.
+Audit two separate dimensions.
 
-References: `references/expert-advisor.md`, `references/market-instrument.md`.
+## Strategy correctness
+
+Does the implementation behave according to the documented strategy specification? Trace setup, signal, filters, entry permission, sizing, management, exit and reset rules against repository sources of truth.
+
+## Strategy robustness
+
+Does the intended behavior survive realistic platform/data/state conditions? Challenge duplicate ticks, same-bar re-entry, forming-bar versus closed-bar semantics, repaint/look-ahead, restart, delayed data, multi-timeframe synchronization, missing history, partial execution and state races.
+
+Do not infer undocumented trading requirements from implementation details and then call them violations.
+
+Use applicable invariants and scenario packs. Distinguish strategy-spec defects from execution/state defects even when they interact.
+
+References: references/source-policy.md, engineering/domain-modeling.md.
