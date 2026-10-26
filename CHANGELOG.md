@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.1.0 — 2026-10-26
+
+- Added the **RELEASE** workflow for delivery, distribution, tagging, and MQL5 Market readiness assessments.
+- Added engineering invariants for execution, financial risk, position ownership, state lifecycle, and indicator/data correctness.
+- Added stable adversarial scenario packs for execution, risk, state, Strategy Tester behavior, MQL5 Market validation, and XAUUSD broker variation.
+- Expanded financial-risk auditing to reconstruct symbol economics, broker volume normalization, aggregate exposure, margin, and worst plausible structure loss.
+- Expanded trade-execution auditing around request/result semantics, retcodes, `OnTradeTransaction`, partial/rejected execution, retries, idempotency, broker constraints, and restart during lifecycle.
+- Expanded state/ownership auditing around inferred state machines, broker reconciliation, netting/hedging, manual/foreign trades, persistence, delayed transactions, restart, and reconnect.
+- Split trading-logic review into strategy correctness and strategy robustness.
+- Added time/session auditing for broker time, local/GMT semantics, DST, daily resets, week/session boundaries, and sparse-tick behavior.
+- Added Economic Calendar auditing with explicit separation between entry blocking and protective management of existing positions.
+- Added MQL5 Market readiness auditing and release-risk classification.
+- Added `references/broker-compatibility.md` and `references/time-semantics.md`.
+- Added structured evidence-schema guidance and validation levels 0–6.
+- Added helper scripts for risk formulas, volume normalization, trading-call triage, position-ownership triage, and indicator-handle triage.
+- Added `templates/release-report.md`.
+- Updated release CI to validate the new v3.1 structure and Python helper syntax.
+- Synchronized `VERSION`, `SKILL.md`, activation banner, and installer to `3.1.0`.
+
 ## 3.0.1 — 2026-10-01
 
 - Synchronized version string across all documentation and scripts (`install.sh`, `README.md`, `mql5-engineering/README.md`, `docs/MQL5-ENGINEERING-v3.0.md`, `CONTRIBUTING.md`).

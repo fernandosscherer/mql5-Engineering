@@ -1,12 +1,12 @@
 ---
 name: mql5-engineering
-description: Plan, build, improve, debug, review, and audit production-grade MQL5 Expert Advisors, indicators, libraries, and trading systems on MetaTrader 5. Uses a discovery-first engineering router, approval-gated execution, official MQL5 documentation as primary authority, and independent specialized audit passes covering code correctness, trading logic, execution, financial risk, state, indicators, tester fidelity, architecture, performance, UI, licensing, documentation, and spec compliance. Market-agnostic: B3, Forex, metals (XAUUSD), CFDs, indices, and other MT5 instruments.
+description: Plan, build, improve, debug, review, audit, and release production-grade MQL5 Expert Advisors, indicators, libraries, and trading systems on MetaTrader 5. Uses discovery-first routing, approval-gated execution, official MQL5 documentation as primary authority, engineering invariants, adversarial scenarios, independent specialized audit passes, broker-compatibility reasoning, and explicit validation coverage. Market-agnostic: B3, Forex, metals (XAUUSD), CFDs, indices, and other MT5 instruments.
 license: MIT
 compatibility: "OpenCode and compatible Agent Skills runtimes"
 metadata:
   audience: mql5-developers
   workflow: engineering-router
-  version: "3.0.1"
+  version: "3.1.0"
   author: "Fernando Scherer"
   repository: "https://github.com/fernandosscherer/mql5-Engineering.git"
 ---
@@ -29,20 +29,20 @@ B. Improve
 C. Debug
 D. Review a change
 E. Audit a product
-F. Other
+F. Release readiness
+G. Other
 
 ## Core operating principle
 
 Facts are the agent's job. Decisions are the user's job.
 
 Therefore:
-
-- inspect the repository before asking the user for facts that can be discovered;
+- inspect the repository before asking for discoverable facts;
 - read applicable source-of-truth documentation before asking how the system works;
-- infer product topology, dependencies, market assumptions, UI presence, licensing presence, tester assets, and architecture from the project;
-- ask the user only for a material decision, missing external fact, inaccessible artifact, or unresolved ambiguity that blocks safe progress;
+- infer topology, dependencies, market assumptions, UI/licensing/tester presence and architecture from the project;
+- ask only for a material decision, missing external fact, inaccessible artifact, or unresolved ambiguity that blocks safe progress;
 - ask one blocking question at a time;
-- never dump a prewritten questionnaire merely because a mode was selected.
+- never dump a ceremonial questionnaire.
 
 ## Router
 
@@ -52,89 +52,72 @@ Choose the narrowest workflow that matches the request.
 - IMPROVE: add a feature, change behavior, refactor, or improve an existing project.
 - DEBUG: diagnose a concrete defect, regression, intermittent failure, unexpected behavior, or performance problem.
 - REVIEW: inspect a change set, branch, commit range, PR, or diff and determine whether the change is correct.
-- AUDIT: inspect a product or substantial subsystem as it exists now for defects, operational hazards, architecture problems, risk failures, spec mismatches, and production-readiness concerns.
+- AUDIT: inspect a product or substantial subsystem as it exists now for defects, hazards, architecture problems, risk failures, spec mismatches, and production-readiness concerns.
+- RELEASE: determine whether a product is sufficiently validated, documented, compatible, and operationally robust for delivery, distribution, or MQL5 Market submission.
 
 Read workflows/<mode>.md after routing.
 
-Do not collapse REVIEW and AUDIT:
+Do not collapse REVIEW, AUDIT, and RELEASE:
 - REVIEW asks whether a change is correct.
 - AUDIT asks what is wrong, fragile, missing, contradictory, or unsafe in the current system.
+- RELEASE asks whether the current fixed point is ready to ship under stated conditions.
 
 ## Discovery before questions
 
 For every mode except a purely greenfield BUILD with no repository, perform silent discovery first.
 
-Discovery should establish as much as possible from code and docs:
-
-1. product type: EA, indicator, library, panel, backend integration, or mixed project;
+Establish as much as possible from code and docs:
+1. product type and topology;
 2. primary entry points and critical runtime paths;
-3. relevant mq5, mqh, presets, tester files, logs, docs, and configs;
+3. relevant mq5, mqh, presets, tester files, logs, docs and configs;
 4. documented strategy and operational requirements;
-5. account model assumptions, symbol/market assumptions, time/session rules, and risk controls;
-6. whether UI, licensing, backend, multi-symbol, optimization, or persistence are actually present;
+5. account model, symbol/market, time/session and risk assumptions;
+6. UI, licensing, backend, multi-symbol, optimization and persistence presence;
 7. available compile/test/tester feedback loops;
 8. recent change context when REVIEW or IMPROVE applies.
 
-scripts/inspect-mql5.sh is a triage aid only. Never treat grep output as a complete audit, and never conclude that a project is clean because the scanner found nothing.
+scripts/inspect-mql5.sh and scanner scripts are triage aids only. Never treat grep/scanner output as a complete audit and never conclude that a project is clean because a scanner found nothing.
 
 ## Questions
 
-Questions are exceptional, not ceremonial.
-
-Ask only when:
+Questions are exceptional, not ceremonial. Ask only when:
 - two plausible interpretations lead to materially different behavior;
 - a trading/risk decision cannot be inferred from authoritative project material;
 - a required external artifact is unavailable;
 - a debug symptom cannot be reproduced without user-only information;
 - a REVIEW fixed point cannot be inferred safely;
-- implementation would change a user-facing, financial, regulatory, security, or licensing decision that has not been approved.
+- implementation changes a user-facing, financial, regulatory, security, or licensing decision that has not been approved.
 
-Do not ask:
-- whether to audit code, logic, design, architecture, risk, and so on when the user asked for a full product audit;
-- whether the project has licensing when the code can answer;
-- which docs are authoritative before searching the repository;
-- what account mode or symbol assumptions exist before reading the code;
-- for success criteria that are already implicit in a concrete task.
+## Default meaning of audit
 
-## Default meaning of "audit"
-
-If the user says only "audit this EA/project/product", interpret it as a full production-oriented audit.
-
-Automatically detect applicable audit domains and mark non-applicable domains N/A. Do not ask the user to choose every domain.
+If the user says only "audit this EA/project/product", interpret it as a full production-oriented audit. Automatically detect applicable domains and mark non-applicable domains N/A.
 
 Default audit domains:
-
 1. Code correctness and MQL5 semantics
 2. Spec/documentation compliance
-3. Trading and operational logic
+3. Trading correctness and robustness
 4. Trade execution
 5. Position/order/deal state and ownership
 6. Financial risk and exposure
 7. Indicator/data correctness when present
 8. Strategy Tester/live fidelity
-9. Architecture and maintainability
-10. Performance/resource lifecycle
-11. UI/operational controls when present
-12. Licensing/backend/security when present
-13. Documentation consistency
-14. Regulatory/user-claim flags when materially relevant
-
-If the user names a narrower target, audit that target plus any adjacent domain required to reason about it safely.
-
-Example: "audit lot sizing" includes financial risk, symbol economics, margin, cumulative exposure, and execution constraints, but does not automatically expand into UI styling.
+9. Time/session semantics when present
+10. Economic calendar behavior when present
+11. Architecture and maintainability
+12. Performance/resource lifecycle
+13. UI/operational controls when present
+14. Licensing/backend/security when present
+15. Documentation consistency
+16. Regulatory/user-claim flags when materially relevant
+17. MQL5 Market validation risk when release/publication is relevant
 
 ## Independent audit passes
 
-A full audit must not be one giant checklist pass.
+A full audit must not be one giant checklist pass. Use applicable files in auditors/ as independent review briefs.
 
-Use the applicable files in auditors/ as independent review briefs.
+When sub-agents are available, run materially independent auditors in separate contexts, preferably in parallel. Prevent recursive delegation. When unavailable, emulate independence with separate passes and separate evidence collection.
 
-When the harness supports sub-agents, run materially independent auditors in separate contexts, preferably in parallel. Prevent auditors from delegating recursively.
-
-When sub-agents are unavailable, emulate independence with separate passes: finish one domain's evidence collection before beginning the next, and do not let one domain's conclusion become evidence for another.
-
-For each full EA audit, the minimum independent passes are:
-
+Minimum for a full EA audit:
 - code;
 - trading logic;
 - trade execution;
@@ -143,48 +126,44 @@ For each full EA audit, the minimum independent passes are:
 - architecture;
 - spec compliance.
 
-Add indicator, tester, performance, UI, licensing, and regulatory passes when applicable.
+Add indicator, tester, time-session, economic-calendar, performance, UI, licensing, regulatory and mql5-market passes when applicable.
 
-## Adversarial review
+## Engineering invariants
 
-Auditors do not merely ask whether code looks reasonable. They try to break assumptions.
+Use invariants/ as cross-cutting truths that implementations must preserve. Invariants are not a substitute for project requirements; they are safety/correctness properties to test against the discovered design.
 
-Build scenarios such as:
+Applicable invariants must be tied to evidence. Typical examples include:
+- an accepted trade request is not equivalent to a completed deal;
+- a product must not modify a position it cannot prove it owns;
+- broker volume normalization must not silently violate the configured risk ceiling;
+- restart/reconnect must not fabricate a clean internal state while broker exposure remains;
+- external-service or licensing failures must not disable protective management of existing positions.
 
-- duplicate ticks or repeated same-bar signals;
-- partial fills and rejected requests;
-- delayed or reordered trade transactions;
-- reconnect or terminal restart;
-- stale selected position/order data;
-- netting versus hedging;
-- manual trades or another EA on the same symbol;
-- insufficient margin;
-- invalid volume/stops/filling mode;
-- spread or gap stress;
-- session transition and daily reset;
-- history arriving late;
-- invalid indicator handles;
-- multi-symbol bars that are not synchronized;
-- Strategy Tester behavior differing from live behavior.
+## Adversarial scenarios
 
-Only apply scenarios relevant to the discovered product.
+Use scenarios/ to challenge discovered assumptions. Select only relevant scenarios and adapt them to the project. Scenario IDs provide stable references; they are not proof by themselves.
+
+Prioritize failure modes involving duplicate signals, delayed/reordered transactions, restart/reconnect, partial/rejected fills, netting/hedging differences, manual/foreign positions, invalid broker constraints, gaps/spread stress, time/session transitions, unavailable history/data, and tester/live divergence.
 
 ## Evidence gate
 
 Every reported finding must contain enough evidence for another engineer to verify it:
-
+- stable finding ID when practical;
+- domain;
 - severity;
 - confidence;
 - nature;
 - file and function/scope, with lines or a short excerpt when available;
-- the exact assumption or invariant that fails;
-- a concrete failure scenario;
+- exact failed assumption/invariant/requirement;
+- concrete trigger or failure scenario;
 - operational/financial/user impact;
 - recommended correction or decision;
+- verification status;
 - authoritative technical reference when MQL5 semantics materially matter.
 
-Confidence labels:
+Use engineering/evidence.md.
 
+Confidence labels:
 - CONFIRMED BY CODE
 - CONFIRMED BY OFFICIAL DOCUMENTATION
 - PROBABLE RISK
@@ -192,94 +171,57 @@ Confidence labels:
 - BROKER / ENVIRONMENT DEPENDENT
 
 Severity:
-
-- CRITICAL: plausible path to uncontrolled financial exposure, wrong-position action, protection failure, destructive state corruption, or product behavior unsafe for production.
+- CRITICAL: plausible path to uncontrolled financial exposure, wrong-position action, protection failure, destructive state corruption, or behavior unsafe for production.
 - HIGH: serious correctness or operational failure that can materially alter trading behavior, execution, state, or customer operation.
 - MEDIUM: real defect or robustness gap with bounded impact.
 - LOW: maintainability, clarity, local resilience, or minor UX problem.
 - INFO: observation without a defect claim.
 
-CRITICAL and HIGH findings require a verification pass before the final report. Re-read the relevant code path and try to falsify the finding. If the evidence does not survive, downgrade or remove it.
-
-Do not inflate findings. Do not suppress findings merely because the project compiles.
+CRITICAL and HIGH findings require a verification pass. Re-read the full path and try to falsify the finding. If the evidence does not survive, downgrade or remove it.
 
 ## Coverage gate
 
-A clean report is not valid unless critical paths were actually inspected.
-
-Before saying there are no CRITICAL/HIGH findings, report audit coverage:
-
-- runtime entry points traced;
-- trade lifecycle traced;
-- risk/exposure path traced;
-- state/ownership path traced;
-- spec sources checked;
-- applicable tester/indicator/licensing/UI paths checked.
+A clean report is invalid unless critical paths were actually inspected. Before saying there are no CRITICAL/HIGH findings, report coverage of:
+- runtime entry points;
+- trade lifecycle;
+- risk/exposure path;
+- state/ownership path;
+- spec sources;
+- applicable tester/indicator/time/licensing/UI/release paths.
 
 If a material path could not be inspected, report LIMITED COVERAGE rather than implying the project is clean.
 
 ## Source authority
 
-For MQL5 language, API, runtime, event, trade, symbol, indicator, and Strategy Tester semantics, current official MQL5 documentation is the primary authority.
+For MQL5 language, API, runtime, event, trade, symbol, indicator, Economic Calendar, and Strategy Tester semantics, current official MQL5 documentation is the primary authority. Read references/source-policy.md when a conclusion depends on external semantics.
 
-Read references/source-policy.md when a conclusion depends on external semantics.
+Repository docs are the primary authority for intended product behavior unless code and docs explicitly establish a newer source of truth. Never invent requirements from the implementation and then claim the implementation violates them.
 
-Repository docs are the primary authority for intended product behavior unless code and docs explicitly establish a newer source of truth.
+## Broker/environment reasoning
 
-Never invent requirements from the implementation and then claim the implementation violates them.
+Use references/broker-compatibility.md for execution mode, filling mode, account model, stops/freeze levels, symbol economics, volume rules, margin/currency and session behavior. Distinguish CODE DEFECT from BROKER DEPENDENT, SYMBOL DEPENDENT, ACCOUNT MODEL DEPENDENT and TEST REQUIRED.
 
 ## Architecture vocabulary
 
-Use engineering/codebase-design.md when assessing or designing architecture.
-
-Prefer:
-- coherent modules;
-- small, explicit interfaces;
-- complexity hidden behind stable seams;
-- locality of state, risk, execution, and persistence behavior;
-- testability through meaningful interfaces.
-
-Look especially for:
-- God OnTick / God OnCalculate handlers;
-- trade logic duplicated across event handlers;
-- state scattered across unrelated globals;
-- wrappers that add no useful abstraction;
-- architecture that makes critical behavior impossible to test in isolation;
-- execution and risk decisions spread across many call sites.
-
-Architecture findings are not automatically defects. Tie them to observed friction, risk, duplication, change cost, or inability to verify behavior.
+Use engineering/codebase-design.md when assessing or designing architecture. Prefer coherent modules, explicit interfaces, local state/risk/execution ownership, and testability through meaningful seams. Architecture findings must be tied to observed risk, duplication, change cost, verification difficulty, or operational fragility.
 
 ## Domain vocabulary
 
-Use engineering/domain-modeling.md when project terminology is ambiguous or inconsistent.
-
-Prefer the project's existing canonical terms. Distinguish signal, setup, order, deal, position, exposure, protection, session, license, activation, entitlement, and other concepts when the distinction matters.
+Use engineering/domain-modeling.md when terminology is ambiguous. Prefer the project's canonical terms and distinguish signal, setup, request, order, deal, position, exposure, protection, session, license, activation and entitlement when material.
 
 ## Testing
 
-Use engineering/testing.md for validation design.
-
-Tests and tester scenarios should validate behavior through meaningful seams, not merely mirror implementation details.
-
-Compilation proves syntax/build correctness only. It does not prove trading correctness, safety, or profitability.
+Use engineering/testing.md. Validate through the highest practical seam. Compilation proves syntax/build correctness only; it does not prove trading correctness, safety, release readiness or profitability. Report validation performed and validation not performed explicitly.
 
 ## Documentation
 
-Documentation is part of done for code-changing tasks.
+Documentation is part of done for code-changing tasks. Update existing source-of-truth docs by default and keep code, defaults, strategy rules, timing, risk, UI, licensing and API behavior consistent.
 
-After approved changes:
-- update existing relevant docs by default;
-- prefer existing source-of-truth documents over creating duplicates;
-- update changelog when the project already uses one and the change is material;
-- keep code, documented defaults, strategy rules, timing, risk, UI, licensing, and API behavior consistent.
-
-AUDIT and REVIEW are read-only with respect to source code. They may produce a report when the user's request implies a deliverable.
+AUDIT and REVIEW are read-only with respect to source code. RELEASE is also read-only unless the user separately asks to fix blockers.
 
 ## Approval boundary
 
-Read-only discovery, diagnosis, review, and audit do not require a planning approval.
-
-Source-code modification does.
+Read-only discovery, diagnosis, review, audit and release assessment do not require planning approval. Source-code modification does.
 
 Before BUILD, IMPROVE, or a DEBUG fix:
 1. discover;
@@ -288,14 +230,14 @@ Before BUILD, IMPROVE, or a DEBUG fix:
 4. request approval;
 5. execute only after approval.
 
-If the user explicitly provided a complete approved plan and asked for execution, do not force a redundant questionnaire.
+If the user explicitly provided a complete approved plan and asked for execution, do not force redundant approval.
 
 ## Safety
 
 - Never place live trades or use real money for validation.
-- Never claim profitability from code review, compilation, backtests, or optimization.
+- Never claim profitability from code review, compilation, backtests or optimization.
 - Never modify a live broker account or production licensing system merely to test.
-- Licensing failure may block new exposure but must not disable protective management of existing positions.
+- Licensing/backend/news-filter failure may block new exposure but must not disable protective management of existing positions.
 - Never put administrative secrets, service-role keys, database credentials, or master licensing secrets in distributed MQL5 clients.
 
 ## Completion
@@ -308,16 +250,24 @@ BUILD / IMPROVE / DEBUG:
 - unperformed validation explicitly listed.
 
 REVIEW:
-- fixed point and reviewed diff are explicit;
-- standards/spec/bug-risk findings are evidence-backed;
-- unchanged code outside the diff is not blamed unless required to explain a changed behavior.
+- fixed point and reviewed diff explicit;
+- standards/spec/bug-risk findings evidence-backed;
+- unchanged code outside the diff is not blamed unless required to explain changed behavior.
 
 AUDIT:
-- scope was derived from the actual project;
-- applicable auditor passes completed;
+- scope derived from the actual project;
+- applicable independent passes completed;
 - coverage limitations stated;
 - findings de-duplicated by root cause;
 - CRITICAL/HIGH findings re-verified;
-- production readiness reported as READY, CONDITIONAL, BLOCKED, or LIMITED COVERAGE.
+- readiness reported as READY, CONDITIONAL, BLOCKED, or LIMITED COVERAGE.
+
+RELEASE:
+- release fixed point explicit;
+- required validation and compatibility checks enumerated;
+- broker/environment assumptions explicit;
+- MQL5 Market risks assessed when relevant;
+- residual gaps listed;
+- verdict reported as READY, CONDITIONAL, BLOCKED, or LIMITED COVERAGE.
 
 Do not produce numeric /10 quality scores.

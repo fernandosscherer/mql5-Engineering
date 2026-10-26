@@ -2,31 +2,29 @@
 
 <img width="1672" height="941" alt="MQL5 Engineering" src="https://github.com/user-attachments/assets/d03259f8-0afb-4986-a201-1216078c3100" />
 
-**Build • Improve • Debug • Review • Audit**
+**Build • Improve • Debug • Review • Audit • Release**
 
-Production-oriented engineering system for **MetaTrader 5 / MQL5**. Designed for Expert Advisors, indicators, libraries, panels, trading execution, financial-risk logic, Strategy Tester workflows, licensing, backend integrations, code review, and production audits.
+Production-oriented engineering system for **MetaTrader 5 / MQL5**. Designed for Expert Advisors, indicators, libraries, panels, trade execution, financial-risk logic, Strategy Tester workflows, licensing/backend integrations, code review, production audits, and release readiness.
 
-**Version:** 3.0.1  
+**Version:** 3.1.0  
 **Created by:** Fernando Scherer  
 **Repository:** https://github.com/fernandosscherer/mql5-Engineering
 
 ---
 
-## Why v3.0
+## Why v3.1
 
-v3.0 replaces the old questionnaire-first workflow with an **intelligent engineering router**.
+v3.1 keeps the discovery-first engineering router introduced in v3.0 and adds a stronger production/release layer.
 
 > **Facts are the agent's job. Decisions are the user's job.**
 
-If the answer can be discovered from source code, documentation, presets, logs, tester reports, configuration, or Git history, the skill should discover it before asking the user.
+The skill now uses three complementary mechanisms:
 
-A request such as:
+- **Independent auditors** for domain-specific review.
+- **Engineering invariants** for cross-cutting correctness/safety properties.
+- **Adversarial scenarios** for repeatable failure-mode validation.
 
-```text
-Audit this Expert Advisor.
-```
-
-should not trigger a long generic questionnaire. The skill first inspects the project, determines which audit domains actually apply, and then runs the relevant engineering passes.
+The goal is not to turn the skill into a generic trading encyclopedia. The goal is to reduce the chance that an agent produces MQL5 code that looks correct but fails under real execution, broker, account, timing, state, or risk conditions.
 
 ---
 
@@ -35,10 +33,11 @@ should not trigger a long generic questionnaire. The skill first inspects the pr
 | Mode | Purpose |
 |---|---|
 | **BUILD** | Create EAs, indicators, libraries, panels, and integrations |
-| **IMPROVE** | Add features or improve existing projects while preserving unrelated behavior |
+| **IMPROVE** | Add features or refactor existing projects while preserving unrelated behavior |
 | **DEBUG** | Reproduce failures, form falsifiable hypotheses, establish root cause, fix, and regress |
 | **REVIEW** | Review a bounded change such as a branch, commit, PR, or diff |
 | **AUDIT** | Perform an adversarial product audit with independent technical passes and evidence-backed findings |
+| **RELEASE** | Assess whether a fixed product version is ready to deliver, distribute, tag, or submit to MQL5 Market |
 
 ### Routing examples
 
@@ -49,6 +48,7 @@ should not trigger a long generic questionnaire. The skill first inspects the pr
 "Review this branch"             → REVIEW
 "Audit this EA"                  → AUDIT
 "Audit only financial risk"      → AUDIT / focused
+"Is this ready for MQL5 Market?" → RELEASE
 ```
 
 ---
@@ -65,13 +65,16 @@ Router
    ├─ IMPROVE
    ├─ DEBUG
    ├─ REVIEW
-   └─ AUDIT
+   ├─ AUDIT
+   └─ RELEASE
    ↓
 Applicable engineering / audit modules
    ↓
+Invariants + adversarial scenarios
+   ↓
 Evidence / validation
    ↓
-Documentation
+Documentation / release verdict
 ```
 
 For source-changing work:
@@ -80,19 +83,17 @@ For source-changing work:
 Discover → Plan → Approve → Execute → Validate → Review → Document
 ```
 
-Read-only discovery, diagnosis, review, and audit do not require an extra approval gate when the user already requested them. Source modification does.
+Read-only discovery, diagnosis, review, audit, and release assessment do not require an extra approval gate when already requested. Source modification does.
 
 ---
 
 ## Audit model
 
-A full audit automatically determines applicability.
-
 Core EA passes:
 
 - code correctness and MQL5 semantics;
 - spec/documentation compliance;
-- trading and operational logic;
+- trading correctness and robustness;
 - trade execution;
 - position/order/deal state and ownership;
 - financial risk and exposure;
@@ -100,81 +101,92 @@ Core EA passes:
 
 Additional passes are loaded only when relevant:
 
-- indicators;
+- indicators/data;
 - Strategy Tester / live fidelity;
-- performance;
-- UI / operational controls;
-- licensing / backend / security;
+- time/session semantics;
+- Economic Calendar/news behavior;
+- performance/resource lifecycle;
+- UI/operational controls;
+- licensing/backend/security;
+- MQL5 Market readiness;
 - documentation consistency;
-- regulatory or user-claim flags.
+- regulatory/user-claim flags.
 
-Domains that do not exist in the project are treated as **N/A**, not as questions to the user.
-
-### Adversarial review
-
-The audit does not only ask whether the code looks reasonable. It actively challenges assumptions with relevant scenarios such as:
-
-```text
-duplicate signal
-partial fill
-rejected order
-delayed transaction
-restart / reconnect
-stale position state
-netting / hedging
-manual trade interference
-invalid volume / stops
-insufficient margin
-spread spike / gap
-session transition
-history reload
-license/API outage
-```
+Domains that do not exist are treated as **N/A**, not as questions to the user.
 
 ### Evidence gate
 
-Material findings should include:
+Material findings should include severity, confidence, exact location, failed invariant/requirement, evidence, concrete failure scenario, impact, recommended correction, and verification status. **CRITICAL** and **HIGH** findings must be re-checked before final reporting.
 
-- severity;
-- confidence;
-- nature;
-- exact location;
-- violated invariant or assumption;
-- evidence;
-- failure scenario;
-- operational / financial impact;
-- recommended correction;
-- technical reference when required.
-
-**CRITICAL** and **HIGH** findings must be re-checked before the final report.
-
-A clean audit with an uninspected critical path is:
-
-```text
-LIMITED COVERAGE
-```
-
-not `READY`.
+A clean audit with an uninspected critical path is `LIMITED COVERAGE`, not `READY`.
 
 ---
 
-## Production readiness
+## New in v3.1
 
-Audit conclusions use:
+### Engineering invariants
+
+`mql5-engineering/invariants/`
+
+Covers:
+
+- execution lifecycle;
+- financial risk;
+- position ownership;
+- state/restart lifecycle;
+- indicators/data.
+
+Examples include: accepted request is not the same as completed execution; an EA must not modify a position it cannot prove it owns; normalized volume must not silently violate the configured risk ceiling; restart must reconcile broker exposure before new decisions.
+
+### Adversarial scenarios
+
+`mql5-engineering/scenarios/`
+
+Stable scenario IDs now cover:
+
+- duplicate signals and delayed/reordered trade transactions;
+- partial/rejected fills;
+- restart/reconnect;
+- netting/hedging differences;
+- risk sizing and aggregate exposure;
+- tester/data edge cases;
+- automated MQL5 Market validation;
+- XAUUSD broker variations.
+
+### Release readiness
+
+`RELEASE` evaluates a fixed product version across compile/test evidence, critical paths, broker/account compatibility, Strategy Tester behavior, risk controls, operational resilience, documentation consistency, and MQL5 Market validation risk.
+
+Verdicts:
 
 - `READY`
 - `CONDITIONAL`
 - `BLOCKED`
 - `LIMITED COVERAGE`
 
-The project deliberately does **not** use artificial `/10` quality scores.
+Release readiness does **not** mean profitable.
 
-`READY` means no known blocker inside adequately reviewed scope. It does **not** mean profitable.
+### Broker Compatibility Matrix
+
+`mql5-engineering/references/broker-compatibility.md`
+
+Covers execution/filling modes, account model, stops/freeze levels, volume limits, tick/contract economics, margin/currency, sessions, and symbol naming/availability.
+
+### Validation levels
+
+`engineering/testing.md` now distinguishes:
+
+- LEVEL 0 — static inspection
+- LEVEL 1 — compilation/build
+- LEVEL 2 — deterministic logic validation
+- LEVEL 3 — Strategy Tester scenario
+- LEVEL 4 — cross-symbol/account-model validation
+- LEVEL 5 — stress/adversarial validation
+- LEVEL 6 — demo forward validation
+
+Compilation alone is never treated as proof of trading correctness.
 
 ---
-
-<img width="841" height="544" alt="install-mql5-Engineering" src="https://github.com/user-attachments/assets/809de0cb-0b1c-4755-9bff-9094b3cf4566" />
-
 
 ## Quick install
 
@@ -203,19 +215,10 @@ Use the mql5-engineering skill to audit this EA.
 ## Install targets
 
 ```bash
-# Universal Agent Skills
 ./install.sh --target universal
-
-# OpenCode
 ./install.sh --target opencode
-
-# Claude
 ./install.sh --target claude
-
-# Current project
 ./install.sh --target project
-
-# Universal + OpenCode + Claude
 ./install.sh --target all
 ```
 
@@ -226,81 +229,25 @@ Use the mql5-engineering skill to audit this EA.
 | claude | `~/.claude/skills/mql5-engineering` |
 | project | `./.agents/skills/mql5-engineering` |
 
----
-
-## Installer commands
-
-### Update
+### Tagged install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash -s -- update
-```
-
-### Install a tagged version
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | \
-  bash -s -- install --ref v3.0
-```
-
-### OpenCode-specific install
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | \
-  bash -s -- install --target opencode
-```
-
-### Uninstall
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | \
-  bash -s -- uninstall --target universal --yes
-```
-
-### Help / version
-
-```bash
-./install.sh --help
-./install.sh --version
+./install.sh install --ref v3.1
 ```
 
 Existing installations are backed up before replacement unless `--no-backup` is used. The installer does not require `sudo`.
 
 ---
 
-## Terminal experience
-
-The installer uses a retro **green + white** terminal identity. Borders, status accents and structural elements are green; primary labels, the MQL5 mark, the market panel and author identity use white/bright-white highlights.
+## Terminal identity
 
 ```text
-╔═════════════════════════════════════════════════════════════╦══════════════════════════════════════════════════════╗
-║                                                             ║                                                      ║
-║   ███╗   ███╗ ██████╗ ██╗     ███████╗                      ║  GLOBAL FINANCIAL MARKET                             ║
-║   ████╗ ████║██╔═══██╗██║     ██╔════╝                      ║                                                      ║
-║   ██╔████╔██║██║   ██║██║     ███████╗                      ║  1.1060 ┤                                    │       ║
-║   ██║╚██╔╝██║██║▄▄ ██║██║     ╚════██║                      ║  1.1040 ┤                               │    █       ║
-║   ██║ ╚═╝ ██║╚██████╔╝███████╗███████║                      ║  1.1020 ┤                          │    █    │       ║
-║   ╚═╝     ╚═╝ ╚══▀▀═╝ ╚══════╝╚══════╝                      ║  1.1000 ┤                     │    █ │  █            ║
-║                                                             ║  1.0980 ┤                │    █ │ █                  ║
-║                 E N G I N E E R I N G                       ║  1.0960 ┤           │    █ │  █                      ║
-║                                                             ║  1.0940 ┤      │    █ │  █                           ║
-║                    I N S T A L L E R                        ║  1.0920 ┤   │  █ │  █                                ║
-║                                                             ║  1.0900 ┼───┴──┴─┴────────────────────────           ║
-║   [ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ]      ║           ↑ TREND / STRUCTURE                        ║
-║                                                             ║                                                      ║
-╚═════════════════════════════════════════════════════════════╩══════════════════════════════════════════════════════╝
+MQL5 ENGINEERING v3.1.0
+[ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ] [ RELEASE ]
 
-╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-║  CREATED BY   FERNANDO SCHERER                                                                                     ║
-║  GITHUB       github.com/fernandosscherer/mql5-Engineering                                                         ║
-╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-
-                                      MQL5 Engineering v3.0.1
-                           Discover → Route → Engineer → Validate → Audit
-                                Facts → Agent | Decisions → User
+Discover → Route → Engineer → Validate → Audit → Release
+Facts → Agent | Decisions → User
 ```
-
-The market chart is decorative terminal art only; it does not display live market data.
 
 `NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` are supported.
 
@@ -315,13 +262,13 @@ mql5-Engineering/
 │   ├── README.md
 │   ├── workflows/
 │   ├── auditors/
+│   ├── invariants/
+│   ├── scenarios/
 │   ├── engineering/
 │   ├── references/
 │   ├── templates/
 │   └── scripts/
 ├── docs/
-│   ├── MQL5-ENGINEERING-v3.0.md
-│   └── INSTALLER-GITHUB.md
 ├── .github/workflows/release.yml
 ├── install.sh
 ├── uninstall.sh
@@ -335,11 +282,11 @@ mql5-Engineering/
 
 ## Source authority
 
-For MQL5 language, runtime, event, trading, symbol, indicator, and Strategy Tester semantics, the current official **MQL5 Reference** is the primary technical authority:
+For MQL5 language, runtime, events, trading, symbol/account properties, indicators, Economic Calendar, and Strategy Tester semantics, the current official **MQL5 Reference** is the primary technical authority:
 
 https://www.mql5.com/en/docs
 
-Repository documentation is the authority for intended product behavior.
+Repository documentation remains the authority for intended product behavior.
 
 ---
 
@@ -348,16 +295,18 @@ Repository documentation is the authority for intended product behavior.
 - Never use live money merely to validate code.
 - Never claim profitability from source review, compilation, backtests, or optimization.
 - Never invent compilation, tester, broker, or market results.
-- Licensing failure may block new exposure, but must not disable protective management of existing positions.
+- Licensing/backend/news-filter failure may block new exposure, but must not disable protective management of existing positions.
 - Never embed administrative secrets or service-role credentials in distributed MQL5 clients.
 
 ---
 
 ## Documentation
 
-Complete v3.0 architecture and operating model:
+Architecture baseline:
 
 [docs/MQL5-ENGINEERING-v3.0.md](docs/MQL5-ENGINEERING-v3.0.md)
+
+The v3.1 additions are documented directly in the skill modules (`workflows/`, `auditors/`, `invariants/`, `scenarios/`, `engineering/`, and `references/`).
 
 Installer documentation:
 
@@ -367,14 +316,16 @@ Installer documentation:
 
 ## Release
 
-Push a matching Git tag such as `v3.0` to trigger the release workflow.
+Push a matching tag such as `v3.1.0` to trigger the release workflow.
 
 The workflow validates:
 
 - `VERSION`;
 - `SKILL.md` metadata;
 - terminal banner version;
-- required v3 structure;
-- shell syntax.
+- installer version;
+- required v3.1 structure;
+- shell syntax;
+- Python helper syntax.
 
 It then builds the release ZIP, generates SHA-256, and publishes the GitHub Release.
