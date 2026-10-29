@@ -1,107 +1,137 @@
 # Contributing to mql5-engineering
 
-Thank you for your interest in improving this skill. This guide covers conventions, file structure, and the release process.
+Thank you for your interest in improving this skill. This guide covers conventions, file structure, documentation policy, and the release process.
 
 ## Scope
 
-This is an agent skill for MQL5 Expert Advisor and indicator development. Contributions should improve:
+This is an agent skill for production-oriented MQL5 engineering. Contributions should improve:
 
-- engineering workflows (BUILD, IMPROVE, DEBUG, REVIEW, AUDIT);
-- reference coverage for MQL5 language, trading, risk, or market behavior;
+- engineering workflows (BUILD, IMPROVE, DEBUG, REVIEW, AUDIT, RELEASE);
+- technical references for MQL5 language, trading, risk, broker behavior, and release readiness;
 - specialized auditor briefs;
+- engineering invariants and adversarial scenarios;
 - installer or activation experience;
-- documentation clarity.
+- documentation clarity and consistency.
 
 ## File Structure
 
-```
+```text
 mql5-engineering/
-├── SKILL.md                  ← Main skill entry point (agent reads this)
-├── workflows/                ← One file per operating mode
-├── auditors/                 ← Independent audit domain briefs
-├── references/               ← Technical reference by topic
-├── engineering/              ← Engineering methodology references
-├── templates/                ← Output templates (reports, docs)
-└── scripts/
-    ├── banner.sh             ← Activation banner
-    └── inspect-mql5.sh       ← Read-only project inspector
+├── SKILL.md                  # Main skill entry point
+├── workflows/                # One file per operating mode
+├── auditors/                 # Independent audit-domain briefs
+├── invariants/               # Cross-cutting correctness and safety properties
+├── scenarios/                # Stable adversarial scenario packs
+├── references/               # Technical references by topic
+├── engineering/              # Engineering methodology references
+├── templates/                # Output templates
+└── scripts/                  # Read-only inspection and validation helpers
 ```
 
 Root-level files:
 
-```
-install.sh      ← Installer (multi-target, multi-platform)
-uninstall.sh    ← Uninstaller
-CHANGELOG.md    ← Version history (update on every release)
-VERSION         ← Single source of version number (e.g. "3.0")
+```text
+install.sh      # Installer
+uninstall.sh    # Uninstaller
+CHANGELOG.md    # Version history
+VERSION         # Canonical version string
 ```
 
 ## Conventions
 
+### Documentation language
+
+All repository documentation must be written in **English**.
+
+This applies to:
+
+- `README.md` files;
+- `SKILL.md`;
+- `CONTRIBUTING.md` and `CHANGELOG.md`;
+- files under `docs/`;
+- workflow, auditor, invariant, scenario, engineering, reference, and template Markdown files;
+- code comments intended to document public or repository-level behavior.
+
+Do not introduce mixed-language documentation. User-facing product text may use another language only when the product requirement explicitly calls for it; the repository documentation that explains that behavior must still be written in English.
+
+Before committing documentation changes, review newly added or modified prose for accidental non-English text.
+
 ### Versioning
 
-This project uses a semantic version scheme (`major.minor` or `major.minor.patch`, e.g. `3.0`, `3.0.1`, `3.1`).
+This project uses semantic versioning (`major.minor.patch` for releases, for example `3.1.0`).
 
-Before releasing, these canonical sources must all contain the **same** version string:
+Before releasing, these canonical sources must contain the same version string:
 
 | Source | Location |
-|--------|----------|
+|---|---|
 | `VERSION` | Root file, plain text, single line |
 | `SKILL.md` metadata | `version:` field in YAML frontmatter |
-| `scripts/banner.sh` | `VERSION="x.y.z"` variable |
-| `install.sh` | `INSTALLER_VERSION="x.y.z"` variable |
-| Git tag | `vX.Y[.Z]` (e.g. `v3.0.1`) |
+| `scripts/banner.sh` | `VERSION="x.y.z"` |
+| `install.sh` | `INSTALLER_VERSION="x.y.z"` |
+| Git tag | `vX.Y.Z` |
 
-The CI workflow (`release.yml`) validates all sources before building the release package.
+The release workflow validates these sources before building a release package.
 
 ### Markdown style
 
-- Use LF line endings (enforced by `.gitattributes`).
-- Keep lines under 120 characters where practical.
+- Use LF line endings, enforced by `.gitattributes`.
 - Use ATX headings (`#`, `##`, `###`).
+- Keep lines reasonably short where practical, without harming readability.
 - Prefer fenced code blocks with explicit language tags.
+- Prefer actionable engineering language over generic prose.
+- Avoid duplicating rules that already have a canonical source of truth.
 
 ### Shell scripts
 
-- All scripts must pass `bash -n` (syntax check).
-- Use `set -euo pipefail` at the top of every script.
-- Honor `NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1`.
-- Never write to project directories — scripts are read-only utilities.
+- All scripts must pass `bash -n`.
+- Use `set -euo pipefail` unless a script has a documented reason not to.
+- Honor `NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` where applicable.
+- Inspection and validation helpers must not silently modify target projects.
 
 ### Reference files (`references/`)
 
-- One topic per file.
-- Start with a `# Topic name` heading.
-- List actionable checks the agent should perform, not abstract theory.
-- Avoid reproducing the MQL5 documentation verbatim; link or cite instead.
+- Keep one primary topic per file.
+- Start with a clear topic heading.
+- List actionable checks the agent should perform, not abstract theory alone.
+- Avoid reproducing official MQL5 documentation verbatim; cite or link to the authoritative source instead.
 
 ### Auditor briefs (`auditors/`)
 
 - Each file is an independent review brief for one audit domain.
-- Write in adversarial tone: assume things can go wrong, not that they are fine.
-- Use the evidence labels: `CONFIRMED BY CODE`, `CONFIRMED BY OFFICIAL DOCUMENTATION`, `PROBABLE RISK`, `HYPOTHESIS — TEST REQUIRED`, `BROKER / ENVIRONMENT DEPENDENT`.
+- Use an adversarial engineering stance: actively challenge assumptions.
+- Distinguish confirmed defects from probable risks, environment-dependent behavior, and test gaps.
+- Use evidence labels defined by the skill rather than inventing new confidence vocabularies casually.
+
+### Invariants and scenarios
+
+- Invariants must describe properties that can be verified or falsified.
+- Scenario IDs must remain stable once published unless there is a strong compatibility reason to change them.
+- Scenario packs should exercise real failure modes rather than restating auditor checklists.
 
 ## Making a Change
 
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b fix/my-topic`.
-3. Make your changes.
-4. Update `CHANGELOG.md` under an `## Unreleased` section.
-5. Verify scripts: `bash -n mql5-engineering/scripts/banner.sh && bash -n mql5-engineering/scripts/inspect-mql5.sh && bash -n install.sh`.
-6. Open a pull request with a clear description of the problem and the fix.
+1. Create a focused branch.
+2. Inspect the current source-of-truth files before editing.
+3. Make the smallest coherent change that solves the problem.
+4. Keep all repository documentation in English.
+5. Update `CHANGELOG.md` under `## Unreleased` for material changes.
+6. Run applicable syntax and consistency checks.
+7. Review the final diff for duplication, stale references, and unintended behavior changes.
+8. Open a pull request with a clear explanation of the problem, the change, and validation performed.
 
-## Releasing a New Version (maintainers)
+## Releasing a New Version
 
-1. Decide the new version string (e.g. `3.1`).
-2. Update `VERSION` → `3.1`.
-3. Update `SKILL.md` frontmatter → `version: "3.1"`.
-4. Update `scripts/banner.sh` → `VERSION="3.1"`.
-5. Move `## Unreleased` entries in `CHANGELOG.md` to `## 3.1 — YYYY-MM-DD`.
-6. Commit: `git commit -m "Release v3.1"`.
-7. Tag: `git tag v3.1`.
-8. Push: `git push origin main --tags`.
-9. The CI workflow (`release.yml`) will validate and create the GitHub Release automatically.
+1. Decide the new version string.
+2. Update `VERSION`.
+3. Update `SKILL.md` metadata.
+4. Update `scripts/banner.sh`.
+5. Update `install.sh`.
+6. Move applicable `## Unreleased` entries in `CHANGELOG.md` to the release section.
+7. Run release validation.
+8. Commit and tag the release.
+9. Push the branch and matching tag.
+10. Confirm that the release workflow completes successfully.
 
 ## Questions
 
-Open an issue on GitHub for questions, bug reports, or feature requests.
+Open a GitHub issue for questions, bug reports, or feature requests.

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Formalized English as the required language for all repository documentation.
+- Updated contributor guidance for the v3.1 structure, including RELEASE, invariants, scenarios, and current validation expectations.
+- Expanded the documentation protocol with an explicit language gate and broader consistency checks for broker, tester, and release documentation.
+
 ## 3.1.0 — 2026-10-26
 
 - Added the **RELEASE** workflow for delivery, distribution, tagging, and MQL5 Market readiness assessments.
