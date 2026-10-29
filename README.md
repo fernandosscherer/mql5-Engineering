@@ -1,30 +1,42 @@
 # MQL5 Engineering
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)](VERSION)
+[![Open Source](https://img.shields.io/badge/open%20source-community--driven-brightgreen.svg)](CONTRIBUTING.md)
+
 <img width="1672" height="941" alt="MQL5 Engineering" src="https://github.com/user-attachments/assets/d03259f8-0afb-4986-a201-1216078c3100" />
 
-**Build • Improve • Debug • Review • Audit • Release**
+**Open-source Agent Skill for production-grade MetaTrader 5 / MQL5 engineering.**
 
-Production-oriented engineering system for **MetaTrader 5 / MQL5**. Designed for Expert Advisors, indicators, libraries, panels, trade execution, financial-risk logic, Strategy Tester workflows, licensing/backend integrations, code review, production audits, and release readiness.
+Build • Improve • Debug • Review • Audit • Release
+
+MQL5 Engineering is a vendor-neutral, evidence-driven engineering system for Expert Advisors, indicators, libraries, panels, execution logic, financial risk, Strategy Tester workflows, licensing/backend integrations, code review, product audits, and release readiness.
+
+**Open source • MIT licensed • Vendor-neutral • Community-driven**
 
 **Version:** 3.1.0  
-**Created by:** Fernando Scherer  
+**Maintainer:** Fernando Scherer  
 **Repository:** https://github.com/fernandosscherer/mql5-Engineering
 
 ---
 
-## Why v3.1
+## Why this project exists
 
-v3.1 keeps the discovery-first engineering router introduced in v3.0 and adds a stronger production/release layer.
+AI agents can produce MQL5 code that compiles and still fails under real execution, broker, account, timing, state, or risk conditions.
+
+MQL5 Engineering adds an engineering layer around that work.
 
 > **Facts are the agent's job. Decisions are the user's job.**
 
-The skill now uses three complementary mechanisms:
+The skill combines:
 
-- **Independent auditors** for domain-specific review.
-- **Engineering invariants** for cross-cutting correctness/safety properties.
-- **Adversarial scenarios** for repeatable failure-mode validation.
+- **independent auditors** for domain-specific review;
+- **engineering invariants** for cross-cutting correctness and safety properties;
+- **adversarial scenarios** for repeatable failure-mode validation;
+- **explicit validation levels** instead of treating compilation as proof;
+- **release readiness** for delivery and MQL5 Market preparation.
 
-The goal is not to turn the skill into a generic trading encyclopedia. The goal is to reduce the chance that an agent produces MQL5 code that looks correct but fails under real execution, broker, account, timing, state, or risk conditions.
+The project does not promise profitability and does not treat backtests, compilation, or code review as proof of live-trading safety.
 
 ---
 
@@ -34,12 +46,10 @@ The goal is not to turn the skill into a generic trading encyclopedia. The goal 
 |---|---|
 | **BUILD** | Create EAs, indicators, libraries, panels, and integrations |
 | **IMPROVE** | Add features or refactor existing projects while preserving unrelated behavior |
-| **DEBUG** | Reproduce failures, form falsifiable hypotheses, establish root cause, fix, and regress |
+| **DEBUG** | Reproduce failures, test hypotheses, establish root cause, fix, and regress |
 | **REVIEW** | Review a bounded change such as a branch, commit, PR, or diff |
 | **AUDIT** | Perform an adversarial product audit with independent technical passes and evidence-backed findings |
 | **RELEASE** | Assess whether a fixed product version is ready to deliver, distribute, tag, or submit to MQL5 Market |
-
-### Routing examples
 
 ```text
 "Create a new EA"                → BUILD
@@ -83,13 +93,38 @@ For source-changing work:
 Discover → Plan → Approve → Execute → Validate → Review → Document
 ```
 
-Read-only discovery, diagnosis, review, audit, and release assessment do not require an extra approval gate when already requested. Source modification does.
+---
+
+## Core and extensions
+
+The project is intentionally split into a small engineering core and extensible domain knowledge.
+
+### Core
+
+- router and operating modes;
+- evidence model;
+- validation model;
+- approval and safety boundaries;
+- release-readiness semantics.
+
+### Extensions
+
+- auditors;
+- invariants;
+- adversarial scenarios;
+- technical references;
+- templates;
+- examples;
+- benchmarks;
+- helper tooling.
+
+This separation is designed to make external contributions easier without turning `SKILL.md` into a monolith.
 
 ---
 
 ## Audit model
 
-Core EA passes:
+Core EA passes cover:
 
 - code correctness and MQL5 semantics;
 - spec/documentation compliance;
@@ -99,7 +134,7 @@ Core EA passes:
 - financial risk and exposure;
 - architecture.
 
-Additional passes are loaded only when relevant:
+Additional passes are loaded when relevant:
 
 - indicators/data;
 - Strategy Tester / live fidelity;
@@ -112,47 +147,23 @@ Additional passes are loaded only when relevant:
 - documentation consistency;
 - regulatory/user-claim flags.
 
-Domains that do not exist are treated as **N/A**, not as questions to the user.
-
-### Evidence gate
-
-Material findings should include severity, confidence, exact location, failed invariant/requirement, evidence, concrete failure scenario, impact, recommended correction, and verification status. **CRITICAL** and **HIGH** findings must be re-checked before final reporting.
-
 A clean audit with an uninspected critical path is `LIMITED COVERAGE`, not `READY`.
 
 ---
 
-## New in v3.1
+## Validation levels
 
-### Engineering invariants
+`mql5-engineering/engineering/testing.md` distinguishes:
 
-`mql5-engineering/invariants/`
+- LEVEL 0 — static inspection
+- LEVEL 1 — compilation/build
+- LEVEL 2 — deterministic logic validation
+- LEVEL 3 — Strategy Tester scenario
+- LEVEL 4 — cross-symbol/account-model validation
+- LEVEL 5 — stress/adversarial validation
+- LEVEL 6 — demo forward validation
 
-Covers execution lifecycle, financial risk, position ownership, state/restart lifecycle, and indicators/data.
-
-### Adversarial scenarios
-
-`mql5-engineering/scenarios/`
-
-Stable scenario IDs cover duplicate signals, delayed/reordered transactions, partial/rejected fills, restart/reconnect, netting/hedging differences, risk sizing, aggregate exposure, tester/data edge cases, MQL5 Market validation, and XAUUSD broker variations.
-
-### Release readiness
-
-`RELEASE` evaluates a fixed product version across compile/test evidence, critical paths, broker/account compatibility, Strategy Tester behavior, risk controls, operational resilience, documentation consistency, and MQL5 Market validation risk.
-
-Verdicts: `READY`, `CONDITIONAL`, `BLOCKED`, or `LIMITED COVERAGE`.
-
-Release readiness does **not** mean profitable.
-
-### Broker Compatibility Matrix
-
-`mql5-engineering/references/broker-compatibility.md`
-
-Covers execution/filling modes, account model, stops/freeze levels, volume limits, tick/contract economics, margin/currency, sessions, and symbol naming/availability.
-
-### Validation levels
-
-`engineering/testing.md` distinguishes LEVEL 0 static inspection through LEVEL 6 demo forward validation. Compilation alone is never treated as proof of trading correctness.
+Compilation alone is never treated as proof of trading correctness.
 
 ---
 
@@ -168,17 +179,13 @@ Default target:
 ~/.agents/skills/mql5-engineering
 ```
 
-Then restart your AI agent/session.
-
-Example:
+Then restart your AI agent/session and activate it, for example:
 
 ```text
 Use the mql5-engineering skill to audit this EA.
 ```
 
----
-
-## Install targets
+### Install targets
 
 ```bash
 ./install.sh --target universal
@@ -195,27 +202,7 @@ Use the mql5-engineering skill to audit this EA.
 | claude | `~/.claude/skills/mql5-engineering` |
 | project | `./.agents/skills/mql5-engineering` |
 
-### Tagged install
-
-```bash
-./install.sh install --ref v3.1
-```
-
-Existing installations are backed up before replacement unless `--no-backup` is used. The installer does not require `sudo`.
-
----
-
-## Terminal identity
-
-```text
-MQL5 ENGINEERING v3.1.0
-[ BUILD ] [ IMPROVE ] [ DEBUG ] [ REVIEW ] [ AUDIT ] [ RELEASE ]
-
-Discover → Route → Engineer → Validate → Audit → Release
-Facts → Agent | Decisions → User
-```
-
-`NO_COLOR` and `MQL5_ENGINEERING_NO_ANIMATION=1` are supported.
+The project aims to remain compatible with OpenCode and compatible Agent Skills runtimes without requiring vendor-specific behavior in the core.
 
 ---
 
@@ -225,7 +212,6 @@ Facts → Agent | Decisions → User
 mql5-Engineering/
 ├── mql5-engineering/
 │   ├── SKILL.md
-│   ├── README.md
 │   ├── workflows/
 │   ├── auditors/
 │   ├── invariants/
@@ -234,11 +220,15 @@ mql5-Engineering/
 │   ├── references/
 │   ├── templates/
 │   └── scripts/
+├── examples/
+├── benchmarks/
 ├── docs/
-├── .github/workflows/release.yml
-├── install.sh
-├── uninstall.sh
-├── VERSION
+├── .github/
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── GOVERNANCE.md
+├── ROADMAP.md
+├── SECURITY.md
 ├── CHANGELOG.md
 ├── LICENSE
 └── README.md
@@ -246,13 +236,73 @@ mql5-Engineering/
 
 ---
 
-## Source authority
+## Contributing
+
+Contributions are welcome.
+
+Useful contribution types include:
+
+- bug fixes;
+- new or improved auditors;
+- engineering invariants;
+- adversarial scenarios;
+- broker/environment references;
+- reproducible benchmark cases;
+- golden-report expectations;
+- helper scripts;
+- documentation improvements;
+- compatibility improvements for Agent Skills runtimes.
+
+Start with [CONTRIBUTING.md](CONTRIBUTING.md). Project decisions and compatibility rules are described in [GOVERNANCE.md](GOVERNANCE.md).
+
+Repository documentation is maintained in **English**.
+
+Community participation is covered by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+---
+
+## Benchmarks
+
+The `benchmarks/` directory is the foundation for the planned v3.2 verification layer.
+
+The goal is to measure whether the skill:
+
+- detects known defects;
+- avoids unsupported findings;
+- preserves critical semantics across versions;
+- behaves consistently across compatible runtimes.
+
+See [benchmarks/README.md](benchmarks/README.md).
+
+---
+
+## Security
+
+Do not publish credentials, private broker/account data, licensing secrets, or exploitable vulnerabilities in public issues.
+
+See [SECURITY.md](SECURITY.md) for responsible reporting guidance.
+
+---
+
+## Roadmap
+
+The next major development direction is **Verification & Benchmarking**: benchmark fixtures, golden reports, self-audit checks, false-positive tracking, and stronger deterministic validation helpers.
+
+See [ROADMAP.md](ROADMAP.md).
+
+---
+
+## Documentation
+
+- [MQL5 Engineering v3.1 architecture and operating model](docs/MQL5-ENGINEERING-v3.1.md)
+- [Installer documentation](docs/INSTALLER-GITHUB.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Governance](GOVERNANCE.md)
+- [Security policy](SECURITY.md)
 
 For MQL5 language, runtime, events, trading, symbol/account properties, indicators, Economic Calendar, and Strategy Tester semantics, the current official **MQL5 Reference** is the primary technical authority:
 
 https://www.mql5.com/en/docs
-
-Repository documentation remains the authority for intended product behavior.
 
 ---
 
@@ -266,22 +316,8 @@ Repository documentation remains the authority for intended product behavior.
 
 ---
 
-## Documentation
+## License
 
-Complete architecture and operating model:
+MQL5 Engineering is released under the [MIT License](LICENSE).
 
-[docs/MQL5-ENGINEERING-v3.1.md](docs/MQL5-ENGINEERING-v3.1.md)
-
-Installer documentation:
-
-[docs/INSTALLER-GITHUB.md](docs/INSTALLER-GITHUB.md)
-
-Repository documentation is maintained in English.
-
----
-
-## Release
-
-Push a matching tag such as `v3.1.0` to trigger the release workflow.
-
-The workflow validates `VERSION`, `SKILL.md` metadata, terminal banner version, installer version, required v3.1 structure, shell syntax, and Python helper syntax. It then builds the release ZIP, generates SHA-256, and publishes the GitHub Release.
+You may use, modify, fork, and redistribute the project under the terms of that license.
