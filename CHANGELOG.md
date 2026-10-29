@@ -5,6 +5,9 @@
 - Formalized English as the required language for all repository documentation.
 - Updated contributor guidance for the v3.1 structure, including RELEASE, invariants, scenarios, and current validation expectations.
 - Expanded the documentation protocol with an explicit language gate and broader consistency checks for broker, tester, and release documentation.
+- Replaced the legacy `docs/MQL5-ENGINEERING-v3.0.md` architecture guide with `docs/MQL5-ENGINEERING-v3.1.md`.
+- Updated the architecture documentation to cover RELEASE, engineering invariants, adversarial scenarios, broker compatibility, time/session and Economic Calendar auditing, MQL5 Market readiness, structured evidence, and validation levels 0–6.
+- Updated the root README to point to the v3.1 architecture guide as the canonical documentation source.
 
 ## 3.1.0 — 2026-10-26
 

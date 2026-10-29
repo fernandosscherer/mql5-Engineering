@@ -128,41 +128,19 @@ A clean audit with an uninspected critical path is `LIMITED COVERAGE`, not `READ
 
 `mql5-engineering/invariants/`
 
-Covers:
-
-- execution lifecycle;
-- financial risk;
-- position ownership;
-- state/restart lifecycle;
-- indicators/data.
-
-Examples include: accepted request is not the same as completed execution; an EA must not modify a position it cannot prove it owns; normalized volume must not silently violate the configured risk ceiling; restart must reconcile broker exposure before new decisions.
+Covers execution lifecycle, financial risk, position ownership, state/restart lifecycle, and indicators/data.
 
 ### Adversarial scenarios
 
 `mql5-engineering/scenarios/`
 
-Stable scenario IDs now cover:
-
-- duplicate signals and delayed/reordered trade transactions;
-- partial/rejected fills;
-- restart/reconnect;
-- netting/hedging differences;
-- risk sizing and aggregate exposure;
-- tester/data edge cases;
-- automated MQL5 Market validation;
-- XAUUSD broker variations.
+Stable scenario IDs cover duplicate signals, delayed/reordered transactions, partial/rejected fills, restart/reconnect, netting/hedging differences, risk sizing, aggregate exposure, tester/data edge cases, MQL5 Market validation, and XAUUSD broker variations.
 
 ### Release readiness
 
 `RELEASE` evaluates a fixed product version across compile/test evidence, critical paths, broker/account compatibility, Strategy Tester behavior, risk controls, operational resilience, documentation consistency, and MQL5 Market validation risk.
 
-Verdicts:
-
-- `READY`
-- `CONDITIONAL`
-- `BLOCKED`
-- `LIMITED COVERAGE`
+Verdicts: `READY`, `CONDITIONAL`, `BLOCKED`, or `LIMITED COVERAGE`.
 
 Release readiness does **not** mean profitable.
 
@@ -174,23 +152,11 @@ Covers execution/filling modes, account model, stops/freeze levels, volume limit
 
 ### Validation levels
 
-`engineering/testing.md` now distinguishes:
-
-- LEVEL 0 — static inspection
-- LEVEL 1 — compilation/build
-- LEVEL 2 — deterministic logic validation
-- LEVEL 3 — Strategy Tester scenario
-- LEVEL 4 — cross-symbol/account-model validation
-- LEVEL 5 — stress/adversarial validation
-- LEVEL 6 — demo forward validation
-
-Compilation alone is never treated as proof of trading correctness.
+`engineering/testing.md` distinguishes LEVEL 0 static inspection through LEVEL 6 demo forward validation. Compilation alone is never treated as proof of trading correctness.
 
 ---
 
 ## Quick install
-
-Recommended universal installation:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash
@@ -302,15 +268,15 @@ Repository documentation remains the authority for intended product behavior.
 
 ## Documentation
 
-Architecture baseline:
+Complete architecture and operating model:
 
-[docs/MQL5-ENGINEERING-v3.0.md](docs/MQL5-ENGINEERING-v3.0.md)
-
-The v3.1 additions are documented directly in the skill modules (`workflows/`, `auditors/`, `invariants/`, `scenarios/`, `engineering/`, and `references/`).
+[docs/MQL5-ENGINEERING-v3.1.md](docs/MQL5-ENGINEERING-v3.1.md)
 
 Installer documentation:
 
 [docs/INSTALLER-GITHUB.md](docs/INSTALLER-GITHUB.md)
+
+Repository documentation is maintained in English.
 
 ---
 
@@ -318,14 +284,4 @@ Installer documentation:
 
 Push a matching tag such as `v3.1.0` to trigger the release workflow.
 
-The workflow validates:
-
-- `VERSION`;
-- `SKILL.md` metadata;
-- terminal banner version;
-- installer version;
-- required v3.1 structure;
-- shell syntax;
-- Python helper syntax.
-
-It then builds the release ZIP, generates SHA-256, and publishes the GitHub Release.
+The workflow validates `VERSION`, `SKILL.md` metadata, terminal banner version, installer version, required v3.1 structure, shell syntax, and Python helper syntax. It then builds the release ZIP, generates SHA-256, and publishes the GitHub Release.
