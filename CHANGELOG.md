@@ -8,6 +8,12 @@
 - Replaced the legacy `docs/MQL5-ENGINEERING-v3.0.md` architecture guide with `docs/MQL5-ENGINEERING-v3.1.md`.
 - Updated the architecture documentation to cover RELEASE, engineering invariants, adversarial scenarios, broker compatibility, time/session and Economic Calendar auditing, MQL5 Market readiness, structured evidence, and validation levels 0–6.
 - Updated the root README to point to the v3.1 architecture guide as the canonical documentation source.
+- Repositioned MQL5 Engineering explicitly as an open-source, MIT-licensed, vendor-neutral Agent Skill.
+- Added `CODE_OF_CONDUCT.md`, `SECURITY.md`, `GOVERNANCE.md`, and `ROADMAP.md`.
+- Added GitHub issue templates for bugs, features, and auditor/scenario proposals, plus a pull request template.
+- Added `examples/` and `benchmarks/` entry points to support community examples and reproducible verification work.
+- Expanded `CONTRIBUTING.md` with core-versus-extension guidance, stable-ID rules, benchmark expectations, security rules, and pull-request validation requirements.
+- Added an open-source project roadmap centered on v3.2 Verification & Benchmarking.
 
 ## 3.1.0 — 2026-10-26
 
