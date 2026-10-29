@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose an improvement to the skill, tooling, documentation, or validation model
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the engineering problem before proposing the implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Explain the smallest coherent change that would solve the problem.
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Expected scope
+      options:
+        - Core workflow / router
+        - Auditor
+        - Invariant
+        - Scenario
+        - Reference
+        - Benchmark
+        - Script / tooling
+        - Documentation
+        - Community / governance
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation approach
+      description: How could the project verify that this change improves behavior without introducing regressions?
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility impact
+      description: Note any effect on stable IDs, reports, installation, runtimes, or existing workflows.
