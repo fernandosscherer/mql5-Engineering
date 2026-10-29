@@ -1,0 +1,66 @@
+name: Bug report
+description: Report a reproducible defect in MQL5 Engineering
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve MQL5 Engineering. Please provide evidence that allows another contributor to reproduce the issue.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v3.1.0 or commit SHA
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Router / SKILL.md
+        - Workflow
+        - Auditor
+        - Invariant
+        - Scenario
+        - Reference
+        - Script / installer
+        - Documentation
+        - Release process
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is wrong, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Provide the smallest reproducible steps, prompt, repository condition, or fixture.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include relevant output, file paths, findings, logs, or links. Remove secrets and private data.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Runtime / environment
+      description: Agent runtime, OS, shell, MetaTrader context, or other details if relevant.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed secrets, credentials, account data, and other sensitive information.
+          required: true
+        - label: I searched existing issues for the same problem.
+          required: true
