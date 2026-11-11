@@ -321,3 +321,12 @@ https://www.mql5.com/en/docs
 MQL5 Engineering is released under the [MIT License](LICENSE).
 
 You may use, modify, fork, and redistribute the project under the terms of that license.
+
+---
+
+## Support this project
+
+MQL5 Engineering is independently developed and maintained. If it helps your work, consider supporting its continued development.
+
+[☕ Buy me a coffee](https://www.buymeacoffee.com/fscherer)
+
