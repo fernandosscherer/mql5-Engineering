@@ -170,8 +170,19 @@ Compilation alone is never treated as proof of trading correctness.
 
 ## Quick install
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash
+### Windows PowerShell
+
+The installer runs with Bash. On Windows, install **Git for Windows** first (it includes Git Bash):
+
+```powershell
+winget install --id Git.Git -e
+```
+
+Close and reopen PowerShell, then run the universal installation:
+
+```powershell
+$bash = "$env:ProgramFiles\Git\bin\bash.exe"
+& $bash -lc "curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash"
 ```
 
 Default target:
@@ -180,21 +191,49 @@ Default target:
 ~/.agents/skills/mql5-engineering
 ```
 
-Then restart your AI agent/session and activate it, for example:
+To install for a specific environment, use one of these PowerShell commands:
+
+**OpenCode**
+
+```powershell
+& "$env:ProgramFiles\Git\bin\bash.exe" -lc "curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash -s -- install --target opencode"
+```
+
+**Claude Code**
+
+```powershell
+& "$env:ProgramFiles\Git\bin\bash.exe" -lc "curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash -s -- install --target claude"
+```
+
+**Current project**
+
+Run this command from the project's root directory:
+
+```powershell
+& "$env:ProgramFiles\Git\bin\bash.exe" -lc "curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash -s -- install --target project"
+```
+
+**All supported targets**
+
+```powershell
+& "$env:ProgramFiles\Git\bin\bash.exe" -lc "curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash -s -- install --target all"
+```
+
+### macOS / Linux
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fernandosscherer/mql5-Engineering/main/install.sh | bash
+```
+
+### Activate the skill
+
+After installation, restart your AI agent/session and try:
 
 ```text
 Use the mql5-engineering skill to audit this EA.
 ```
 
 ### Install targets
-
-```bash
-./install.sh --target universal
-./install.sh --target opencode
-./install.sh --target claude
-./install.sh --target project
-./install.sh --target all
-```
 
 | Target | Path |
 |---|---|
